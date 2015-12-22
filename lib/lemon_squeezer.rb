@@ -1,5 +1,9 @@
 require "lemon_squeezer/version"
 
+begin
+  require "pry"
+rescue LoadError
+end
+
 module LemonSqueezer
-  # Your code goes here...
 end
