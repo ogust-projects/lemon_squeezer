@@ -1,5 +1,5 @@
 module LemonSqueezer
-  class Transfert
+  class Transfer
     attr_accessor :id, :debit_wallet, :credit_wallet, :amount, :debit, :credit, :commission, :status, :error
 
     SEND_PAYMENT_PARAMS = %i(debitWallet creditWallet amount)
@@ -9,8 +9,8 @@ module LemonSqueezer
       @credit_wallet  = params[:credit_wallet]
       @amount         = params[:amount]
       @message        = params[:message] if params.has_key?(:message)
-      @scheduled_date = params(:scheduled_date) if params.has_key?(:scheduled_date)
-      @private_data   = params(:private_data) if params.has_key?(:private_data)
+      @scheduled_date = params[:scheduled_date] if params.has_key?(:scheduled_date)
+      @private_data   = params[:private_data] if params.has_key?(:private_data)
     end
 
     def send_payment
@@ -18,12 +18,12 @@ module LemonSqueezer
         result  = LemonSqueezer::Request.new(url: 'send_payment', message: send_payment_message).response
 
         if result.has_key?(:trans)
-          transfert = result[:trans][:hpay]
-          self.id                = transfert[:id]
-          self.debit      = transfert[:deb].to_f
-          self.credit     = transfert[:cred].to_f
-          self.commission = transfert[:com].to_f
-          self.status            = transfert[:status].to_i
+          transfer        = result[:trans][:hpay]
+          self.id         = transfer[:id]
+          self.debit      = transfer[:deb].to_f
+          self.credit     = transfer[:cred].to_f
+          self.commission = transfer[:com].to_f
+          self.status     = transfer[:status].to_i
         end
 
         if result.has_key?(:e)

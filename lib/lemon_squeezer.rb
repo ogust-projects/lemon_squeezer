@@ -3,7 +3,7 @@ require "net/http"
 require "lemon_squeezer/version"
 require "lemon_squeezer/utils"
 require "lemon_squeezer/request"
-require "lemon_squeezer/transfert"
+require "lemon_squeezer/transfer"
 require "lemon_squeezer/wallet"
 require "lemon_squeezer/configuration"
 
@@ -31,8 +31,8 @@ module LemonSqueezer
     Wallet.new(params).register
   end
 
-  def self.transfert_send_payment(params = {})
-    Transfert.new(params).send_payment
+  def self.transfer_send_payment(params = {})
+    Transfer.new(params).send_payment
   end
 
   def self.reset
