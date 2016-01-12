@@ -5,8 +5,8 @@ module LemonSqueezer
     let(:transfer) {
       LemonSqueezer::Transfer.new(
         {
-          debit_wallet: 'sc',
-          credit_wallet: 'rspecwallet',
+          sender: 'sc',
+          receiver: 'rspecwallet',
           amount: 42.42
         }
       )
@@ -14,22 +14,22 @@ module LemonSqueezer
     let(:invalid_transfer) {
       LemonSqueezer::Transfer.new(
         {
-          debit_wallet: 'sc',
-          credit_wallet: 'sc',
+          sender: 'sc',
+          receiver: 'sc',
           amount: 42.42
         }
       )
     }
     let(:no_transfer) { LemonSqueezer::Transfer.new }
-    let(:shorcut_send_payments) { LemonSqueezer.transfer_send_payment }
+    let(:shortcut_send_payment) { LemonSqueezer.transfer_send_payment }
 
     describe "#send_payment" do
       it "returns a LemonSqueezer::Transfer object" do
         expect(transfer).to be_a(LemonSqueezer::Transfer)
       end
 
-      it "shorcut return a LemonSqueezer::Wallet object" do
-        expect(shorcut_send_payments).to be_a(LemonSqueezer::Transfer)
+      it "shortcut return a LemonSqueezer::Transfer object" do
+        expect(shortcut_send_payment).to be_a(LemonSqueezer::Transfer)
       end
 
       it "send payment between main wallet and a supplier wallet" do

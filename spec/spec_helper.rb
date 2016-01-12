@@ -53,6 +53,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     LemonSqueezer.configure do |config|
       config.production = false
+      config.log        = false
       config.login      = ENV["lemonway_login"]
       config.password   = ENV["lemonway_password"]
       config.language   = ENV["lemonway_language"]

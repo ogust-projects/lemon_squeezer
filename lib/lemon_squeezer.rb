@@ -3,6 +3,7 @@ require "net/http"
 require "lemon_squeezer/version"
 require "lemon_squeezer/utils"
 require "lemon_squeezer/request"
+require "lemon_squeezer/card"
 require "lemon_squeezer/transfer"
 require "lemon_squeezer/wallet"
 require "lemon_squeezer/configuration"
@@ -21,6 +22,10 @@ module LemonSqueezer
 
   def self.configuration
     @configuration ||= Configuration.new
+  end
+
+  def self.card_fast_pay(params = {})
+    Card.new(params).fast_pay
   end
 
   def self.wallet_get_details(params = {})
