@@ -1,16 +1,16 @@
 module LemonSqueezer
   class Transfer
-    attr_accessor :id, :debit_wallet, :credit_wallet, :amount, :debit, :credit, :commission, :status, :error
+    attr_accessor :id, :sender, :receiver, :amount, :debit, :credit, :commission, :status, :error
 
     SEND_PAYMENT_PARAMS = %i(debitWallet creditWallet amount)
 
     def initialize(params = {})
-      @debit_wallet   = params[:debit_wallet]
-      @credit_wallet  = params[:credit_wallet]
+      @sender         = params[:sender]
+      @receiver       = params[:receiver]
       @amount         = params[:amount]
-      @message        = params[:message] if params.has_key?(:message)
-      @scheduled_date = params[:scheduled_date] if params.has_key?(:scheduled_date)
-      @private_data   = params[:private_data] if params.has_key?(:private_data)
+      @message        = params[:message]
+      @scheduled_date = params[:scheduled_date]
+      @private_data   = params[:private_data]
     end
 
     def send_payment
@@ -46,8 +46,8 @@ module LemonSqueezer
     def send_payment_params
       params = {}
 
-      params.merge!(debitWallet: @debit_wallet) if @debit_wallet
-      params.merge!(creditWallet: @credit_wallet) if @credit_wallet
+      params.merge!(debitWallet: @sender) if @sender
+      params.merge!(creditWallet: @receiver) if @receiver
       params.merge!(amount: @amount) if @amount
 
       params

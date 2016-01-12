@@ -5,18 +5,52 @@ module LemonSqueezer
     let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: LemonSqueezer.configuration.login}) }
     let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com'}) }
     let(:no_wallet) { LemonSqueezer::Wallet.new }
-    let(:shorcut_wallet_get_details) { LemonSqueezer.wallet_get_details({id: 'sc', email: LemonSqueezer.configuration.login}) }
-    let(:register_wallet) { LemonSqueezer::Wallet.new({id: random_string, email: random_email, first_name: random_string, last_name: random_string}) }
-    let(:register_existing_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: LemonSqueezer.configuration.login, first_name: random_string, last_name: random_string}) }
-    let(:shorcut_wallet_register) { LemonSqueezer.wallet_register({id: random_string, email: random_email, first_name: random_string, last_name: random_string}) }
+    let(:shortcut_wallet_get_details) {
+      LemonSqueezer.wallet_get_details(
+                                        {
+                                          id: 'sc',
+                                          email: LemonSqueezer.configuration.login
+                                        }
+                                      )
+    }
+    let(:register_wallet) {
+      LemonSqueezer::Wallet.new(
+                                  {
+                                    id: random_string,
+                                    email: random_email,
+                                    first_name: random_string,
+                                    last_name: random_string
+                                  }
+                                )
+    }
+    let(:register_existing_wallet) {
+      LemonSqueezer::Wallet.new(
+                                  {
+                                    id: 'sc',
+                                    email: LemonSqueezer.configuration.login,
+                                    first_name: random_string,
+                                    last_name: random_string
+                                  }
+                                )
+    }
+    let(:shortcut_wallet_register) {
+      LemonSqueezer.wallet_register(
+                                      {
+                                        id: random_string,
+                                        email: random_email,
+                                        first_name: random_string,
+                                        last_name: random_string
+                                      }
+                                    )
+    }
 
     describe "#get_details" do
       it "returns a LemonSqueezer::Wallet object" do
         expect(main_wallet).to be_a(LemonSqueezer::Wallet)
       end
 
-      it "shorcut return a LemonSqueezer::Wallet object" do
-        expect(shorcut_wallet_get_details).to be_a(LemonSqueezer::Wallet)
+      it "shortcut return a LemonSqueezer::Wallet object" do
+        expect(shortcut_wallet_get_details).to be_a(LemonSqueezer::Wallet)
       end
 
       it "get details of main wallet" do
@@ -48,8 +82,8 @@ module LemonSqueezer
         expect(register_wallet).to be_a(LemonSqueezer::Wallet)
       end
 
-      it "shorcut return a LemonSqueezer::Wallet object" do
-        expect(shorcut_wallet_register).to be_a(LemonSqueezer::Wallet)
+      it "shortcut return a LemonSqueezer::Wallet object" do
+        expect(shortcut_wallet_register).to be_a(LemonSqueezer::Wallet)
       end
 
       it "get details of main wallet" do
