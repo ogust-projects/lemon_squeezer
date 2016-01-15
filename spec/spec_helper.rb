@@ -54,9 +54,9 @@ RSpec.configure do |config|
     LemonSqueezer.configure do |config|
       config.production = false
       config.log        = false
-      config.login      = ENV["lemonway_login"]
-      config.password   = ENV["lemonway_password"]
-      config.language   = ENV["lemonway_language"]
+      config.login      = ENV["LEMONWAY_LOGIN"]
+      config.password   = ENV["LEMONWAY_PASSWORD"]
+      config.language   = ENV["LEMONWAY_LANGUAGE"]
     end
 
     rspec_wallet = LemonSqueezer::Wallet.new({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com'})
