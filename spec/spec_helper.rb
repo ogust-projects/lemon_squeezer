@@ -59,7 +59,7 @@ RSpec.configure do |config|
       config.language   = ENV["LEMONWAY_LANGUAGE"]
     end
 
-    rspec_wallet = LemonSqueezer::Wallet.new({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com'})
+    rspec_wallet = LemonSqueezer.wallet_get_details({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com'})
 
     rspec_wallet.get_details
 

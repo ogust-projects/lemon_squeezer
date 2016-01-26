@@ -1,9 +1,11 @@
 require "savon"
+require "ibanizator"
 require "net/http"
 require "lemon_squeezer/version"
-require "lemon_squeezer/utils"
 require "lemon_squeezer/request"
+require "lemon_squeezer/response"
 require "lemon_squeezer/card"
+require "lemon_squeezer/iban"
 require "lemon_squeezer/transfer"
 require "lemon_squeezer/wallet"
 require "lemon_squeezer/configuration"
@@ -28,12 +30,20 @@ module LemonSqueezer
     Card.new(params).fast_pay
   end
 
+  def self.iban_register(params = {})
+    Iban.new(params).register
+  end
+
   def self.wallet_get_details(params = {})
     Wallet.new(params).get_details
   end
 
   def self.wallet_register(params = {})
     Wallet.new(params).register
+  end
+
+  def self.transfer_money_out(params = {})
+    Transfer.new(params).money_out
   end
 
   def self.transfer_send_payment(params = {})

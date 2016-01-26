@@ -41,7 +41,7 @@ module LemonSqueezer
 
     describe "#fast_pay" do
       it "returns a LemonSqueezer::Card object" do
-        expect(card).to be_a(LemonSqueezer::Card)
+        expect(card.fast_pay).to be_a(LemonSqueezer::Card)
       end
 
       it "shortcut return a LemonSqueezer::Card object" do
@@ -53,9 +53,9 @@ module LemonSqueezer
         expect(card.id).to be_a(String)
         expect(card.from_moneyin).to be_a(String)
         expect(card.card_id).to be_a(String)
-        expect(card.debit).to be_a(Float)
-        expect(card.credit).to be_a(Float)
-        expect(card.commission).to be_a(Float)
+        expect(card.debit).to be_a(BigDecimal)
+        expect(card.credit).to be_a(BigDecimal)
+        expect(card.commission).to be_a(BigDecimal)
         expect(card.status).to be_a(Fixnum)
       end
 
