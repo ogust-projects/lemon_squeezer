@@ -13,42 +13,47 @@ module LemonSqueezer
     end
 
     def get_details
-      if LemonSqueezer::Utils.mandatory_params_present?(GET_DETAILS_PARAMS, get_details_params)
-        result  = LemonSqueezer::Request.new(url: 'get_wallet_details', message: get_details_message).response
+      request = Request.new(GET_DETAILS_PARAMS, get_details_params, get_details_message, :get_wallet_details, :wallet)
 
-        if result.has_key?(:wallet)
-          wallet       = result[:wallet]
-          self.id      = wallet[:id]
-          self.balance = wallet[:bal].to_f
-          self.name    = wallet[:name]
-          self.email   = wallet[:email]
+      Response.new(request).submit do |result, error|
+        if result
+          self.id      = result[:id]
+          self.balance = result[:bal].to_f
+          self.name    = result[:name]
+          self.email   = result[:email]
           self.iban    = []
-          self.status  = wallet[:status].to_i
-          self.blocked = wallet[:blocked] == '1'
+          self.status  = result[:status].to_i
+          self.blocked = result[:blocked] == '1'
         end
 
-        if result.has_key?(:e)
-          error      = result[:e]
-          self.error =  {
-                          code: error[:code].to_i,
-                          message: error[:msg]
-                        }
-        end
-      else
-        self.error =  {
-                        code: -1,
-                        message: 'Missing parameters'
-                      }
+        self.error = error
       end
 
       self
     end
 
+    def register
+      request = Request.new(REGISTER_PARAMS, register_params, register_message, :register_wallet, :wallet)
+
+      Response.new(request).submit do |result, error|
+        if result
+          self.id   = result[:id]
+          self.lwid = result[:lwid]
+        end
+
+        self.error = error
+      end
+
+      self
+    end
+
+    private
+
     def get_details_params
       params = {}
 
-      params.merge!(wallet: @id) if @id
-      params.merge!(email: @email) if @email
+      params.merge!(wallet: self.id) if self.id
+      params.merge!(email: self.email) if self.email
 
       params
     end
@@ -61,40 +66,13 @@ module LemonSqueezer
       message
     end
 
-    def register
-      if LemonSqueezer::Utils.mandatory_params_present?(REGISTER_PARAMS, register_params)
-        result  = LemonSqueezer::Request.new(url: 'register_wallet', message: register_message).response
-
-        if result.has_key?(:wallet)
-          wallet    = result[:wallet]
-          self.id   = wallet[:id]
-          self.lwid = wallet[:lwid]
-        end
-
-        if result.has_key?(:e)
-          error      = result[:e]
-          self.error =  {
-                          code: error[:code].to_i,
-                          message: error[:msg]
-                        }
-        end
-      else
-        self.error =  {
-                        code: -1,
-                        message: 'Missing parameters'
-                      }
-      end
-
-      self
-    end
-
     def register_params
       params = {}
 
-      params.merge!(wallet: @id) if @id
-      params.merge!(clientMail: @email) if @email
-      params.merge!(clientFirstName: @first_name) if @first_name
-      params.merge!(clientLastName: @last_name) if @last_name
+      params.merge!(wallet: self.id) if self.id
+      params.merge!(clientMail: self.email) if self.email
+      params.merge!(clientFirstName: self.first_name) if self.first_name
+      params.merge!(clientLastName: self.last_name) if self.last_name
 
       params
     end

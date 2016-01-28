@@ -46,7 +46,7 @@ module LemonSqueezer
 
     describe "#get_details" do
       it "returns a LemonSqueezer::Wallet object" do
-        expect(main_wallet).to be_a(LemonSqueezer::Wallet)
+        expect(main_wallet.get_details).to be_a(LemonSqueezer::Wallet)
       end
 
       it "shortcut return a LemonSqueezer::Wallet object" do
@@ -79,7 +79,7 @@ module LemonSqueezer
 
     describe "#register" do
       it "returns a LemonSqueezer::Wallet object" do
-        expect(register_wallet).to be_a(LemonSqueezer::Wallet)
+        expect(register_wallet.register).to be_a(LemonSqueezer::Wallet)
       end
 
       it "shortcut return a LemonSqueezer::Wallet object" do

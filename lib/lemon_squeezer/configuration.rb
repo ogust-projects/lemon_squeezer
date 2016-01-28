@@ -9,7 +9,7 @@ module LemonSqueezer
 
     def client
       @client ||= Savon.client(
-                    log: @log,
+                    log: self.log,
                     env_namespace: :soapenv,
                     headers: {},
                     wsdl: directkit_wsdl
@@ -26,16 +26,16 @@ module LemonSqueezer
 
     def auth
       {
-        wlLogin: @login,
-        wlPass: @password,
-        language: @language,
+        wlLogin: self.login,
+        wlPass: self.password,
+        language: self.language,
         walletIp: public_ip,
         walletUa: 'powered by LemonSqueezer'
       }
     end
 
     def public_ip
-      @public_ip ||= ::Net::HTTP.get URI "https://api.ipify.org"
+      @public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
     end
   end
 end
