@@ -1,54 +1,68 @@
 module LemonSqueezer
   class Transfer
-    attr_accessor :id, :sender, :receiver, :amount, :debit, :credit, :commission, :status, :error
+    attr_accessor :id, :sender, :receiver, :iban, :iban_id, :amount, :debit, :credit, :commission, :status, :error, :message, :scheduled_date, :private_data, :auto_comission, :transfered_at
 
     SEND_PAYMENT_PARAMS = %i(debitWallet creditWallet amount)
+    MONEY_OUT_PARAMS = %i(wallet amountTot autoCommission)
 
     def initialize(params = {})
       @sender         = params[:sender]
       @receiver       = params[:receiver]
+      @iban_id        = params[:iban_id]
       @amount         = params[:amount]
       @message        = params[:message]
       @scheduled_date = params[:scheduled_date]
       @private_data   = params[:private_data]
+      @auto_comission = params[:auto_comission]
     end
 
     def send_payment
-      if LemonSqueezer::Utils.mandatory_params_present?(SEND_PAYMENT_PARAMS, send_payment_params)
-        result  = LemonSqueezer::Request.new(url: 'send_payment', message: send_payment_message).response
+      request = Request.new(SEND_PAYMENT_PARAMS, send_payment_params, send_payment_message, :send_payment, :trans)
 
-        if result.has_key?(:trans)
-          transfer        = result[:trans][:hpay]
-          self.id         = transfer[:id]
-          self.debit      = transfer[:deb].to_f
-          self.credit     = transfer[:cred].to_f
-          self.commission = transfer[:com].to_f
-          self.status     = transfer[:status].to_i
+      Response.new(request).submit do |result, error|
+        if result
+          self.id            = result[:hpay][:id]
+          self.debit         = result[:hpay][:deb].to_f
+          self.credit        = result[:hpay][:cred].to_f
+          self.commission    = result[:hpay][:com].to_f
+          self.status        = result[:hpay][:status].to_i
+          self.transfered_at = DateTime.parse(result[:hpay][:date])
         end
 
-        if result.has_key?(:e)
-          error      = result[:e]
-          self.error =  {
-                          code: error[:code],
-                          message: error[:msg]
-                        }
-        end
-      else
-        self.error =  {
-                        code: -1,
-                        message: 'Missing parameters'
-                      }
+        self.error = error
       end
 
       self
     end
 
+    def money_out
+      request = Request.new(MONEY_OUT_PARAMS, money_out_params, money_out_message, :money_out, :trans)
+
+      Response.new(request).submit do |result, error|
+        if result
+          self.id            = result[:hpay][:id]
+          self.iban          = result[:hpay][:mlabel]
+          self.debit         = result[:hpay][:deb].to_f
+          self.credit        = result[:hpay][:cred].to_f
+          self.commission    = result[:hpay][:com].to_f
+          self.status        = result[:hpay][:status].to_i
+          self.transfered_at = DateTime.parse(result[:hpay][:date])
+        end
+
+        self.error = error
+      end
+
+      self
+    end
+
+    private
+
     def send_payment_params
       params = {}
 
-      params.merge!(debitWallet: @sender) if @sender
-      params.merge!(creditWallet: @receiver) if @receiver
-      params.merge!(amount: @amount) if @amount
+      params.merge!(debitWallet: self.sender) if self.sender
+      params.merge!(creditWallet: self.receiver) if self.receiver
+      params.merge!(amount: self.amount) if self.amount
 
       params
     end
@@ -58,9 +72,31 @@ module LemonSqueezer
                   version: '1.0'
                 )
 
-      message.merge!(message: @message) if @message
-      message.merge!(scheduledDate: @scheduled_date) if @scheduled_date
-      message.merge!(privateData: @private_data) if @private_data
+      message.merge!(message: self.message) if self.message
+      message.merge!(scheduledDate: self.scheduled_date) if self.scheduled_date
+      message.merge!(privateData: self.private_data) if self.private_data
+
+      message
+    end
+
+    def money_out_params
+      params = {}
+
+      params.merge!(wallet: self.sender) if self.sender
+      params.merge!(amountTot: self.amount) if self.amount
+      params.merge!(autoCommission: self.auto_comission) if self.auto_comission
+
+      params
+    end
+
+    def money_out_message
+      message = money_out_params.merge!(
+                  version: '1.3'
+                )
+
+      message.merge!(amountCom: self.commission) if self.commission
+      message.merge!(message: self.message) if self.message
+      message.merge!(ibanId: self.iban_id) if self.iban_id
 
       message
     end
