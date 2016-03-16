@@ -57,6 +57,7 @@ module LemonSqueezer
         expect(card.credit).to be_a(BigDecimal)
         expect(card.commission).to be_a(BigDecimal)
         expect(card.status).to be_a(Fixnum)
+        expect(card.error).to be_nil
       end
 
       it "return an error" do
@@ -69,6 +70,179 @@ module LemonSqueezer
         no_card.fast_pay
         expect(no_card.error).to be_a(Hash)
         expect(no_card.error[:code]).to eq -1
+      end
+    end
+
+    let(:card_money_in) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: 'rspecwallet',
+          card_type: 1,
+          card_number: '5017670000006700',
+          card_crypto: '123',
+          card_date: (DateTime.now + 35).strftime("%m/%Y"),
+          amount: 24.56,
+          auto_commission: 0
+        }
+      )
+    }
+    let(:invalid_card_money_in) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: random_string,
+          card_type: 1,
+          card_number: '5017670000006700',
+          card_crypto: '123',
+          card_date: (DateTime.now + 35).strftime("%m/%Y"),
+          amount: 24.56,
+          auto_commission: 0
+        }
+      )
+    }
+    let(:no_card_money_in) { LemonSqueezer::Card.new }
+    let(:shortcut_money_in) { LemonSqueezer.card_money_in }
+
+    describe "#money_in" do
+      it "returns a LemonSqueezer::Card object" do
+        expect(card_money_in.money_in).to be_a(LemonSqueezer::Card)
+      end
+
+      it "shortcut return a LemonSqueezer::Card object" do
+        expect(shortcut_money_in).to be_a(LemonSqueezer::Card)
+      end
+
+      it "pay with a card to rspecwallet wallet" do
+        card_money_in.money_in
+        expect(card_money_in.id).to be_a(String)
+        expect(card_money_in.card_number).to be_a(String)
+        expect(card_money_in.receiver).to be_a(String)
+        expect(card_money_in.credit).to be_a(BigDecimal)
+        expect(card_money_in.commission).to be_a(BigDecimal)
+        expect(card_money_in.status).to be_a(Fixnum)
+        expect(card_money_in.error).to be_nil
+      end
+
+      it "return an error" do
+        invalid_card_money_in.money_in
+        expect(invalid_card_money_in.error).to be_a(Hash)
+        expect(invalid_card_money_in.error[:code]).not_to eq -1
+      end
+
+      it "return error 250" do
+        no_card_money_in.money_in
+        expect(no_card_money_in.error).to be_a(Hash)
+        expect(no_card_money_in.error[:code]).to eq -1
+      end
+    end
+
+    let(:card_money_in_with_card_id) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: 'rspecwallet',
+          card_id: card_registered.register.id,
+          amount: 234.56,
+          auto_commission: 0
+        }
+      )
+    }
+    let(:invalid_card_money_in_with_card_id) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: random_string,
+          card_id: card_registered.register.id,
+          amount: 234.56,
+          auto_commission: 0
+        }
+      )
+    }
+    let(:no_card_money_in_with_card_id) { LemonSqueezer::Card.new }
+    let(:shortcut_money_in_with_card_id) { LemonSqueezer.card_money_in_with_card_id }
+
+    describe "#money_in_with_card_id" do
+      it "returns a LemonSqueezer::Card object" do
+        expect(card_money_in_with_card_id.money_in_with_card_id).to be_a(LemonSqueezer::Card)
+      end
+
+      it "shortcut return a LemonSqueezer::Card object" do
+        expect(shortcut_money_in_with_card_id).to be_a(LemonSqueezer::Card)
+      end
+
+      it "pay with a registred card to rspecwallet wallet" do
+        card_money_in_with_card_id.money_in_with_card_id
+        binding.pry
+        expect(card_money_in_with_card_id.id).to be_a(String)
+        expect(card_money_in_with_card_id.from_moneyin).to be_a(String)
+        expect(card_money_in_with_card_id.card_number).to be_a(String)
+        expect(card_money_in_with_card_id.receiver).to be_a(String)
+        expect(card_money_in_with_card_id.credit).to be_a(BigDecimal)
+        expect(card_money_in_with_card_id.commission).to be_a(BigDecimal)
+        expect(card_money_in_with_card_id.status).to be_a(Fixnum)
+        expect(card_money_in_with_card_id.error).to be_nil
+      end
+
+      it "return an error" do
+        invalid_card_money_in_with_card_id.money_in_with_card_id
+        expect(invalid_card_money_in_with_card_id.error).to be_a(Hash)
+        expect(invalid_card_money_in_with_card_id.error[:code]).not_to eq -1
+      end
+
+      it "return error 250" do
+        no_card_money_in_with_card_id.money_in_with_card_id
+        expect(no_card_money_in_with_card_id.error).to be_a(Hash)
+        expect(no_card_money_in_with_card_id.error[:code]).to eq -1
+      end
+    end
+
+    let(:card_registered) {
+      LemonSqueezer::Card.new(
+        {
+          card_type: 1,
+          card_number: '5017670000006700',
+          card_crypto: '123',
+          card_date: (DateTime.now + 35).strftime("%m/%Y"),
+          receiver: 'rspecwallet_tech'
+        }
+      )
+    }
+    let(:invalid_card_registered) {
+      LemonSqueezer::Card.new(
+        {
+          card_type: 1,
+          card_number: '5017670000006700',
+          card_crypto: '123',
+          card_date: (DateTime.now + 35).strftime("%m/%Y"),
+          receiver: random_string
+        }
+      )
+    }
+    let(:no_card_registered) { LemonSqueezer::Card.new }
+    let(:shortcut_card_registred) { LemonSqueezer.card_register }
+
+    describe "#register" do
+      it "returns a LemonSqueezer::Card object" do
+        expect(card_registered.register).to be_a(LemonSqueezer::Card)
+      end
+
+      it "shortcut return a LemonSqueezer::Card object" do
+        expect(shortcut_card_registred).to be_a(LemonSqueezer::Card)
+      end
+
+      it "pay by fast pay to main wallet" do
+        card_registered.register
+        expect(card_registered.id).to be_a(String)
+        expect(card_registered.error).to be_nil
+      end
+
+      it "return an error" do
+        invalid_card_registered.register
+        expect(invalid_card_registered.error).to be_a(Hash)
+        expect(invalid_card_registered.error[:code]).not_to eq -1
+      end
+
+      it "return error 250" do
+        no_card_registered.register
+        expect(no_card_registered.error).to be_a(Hash)
+        expect(no_card_registered.error[:code]).to eq -1
       end
     end
   end

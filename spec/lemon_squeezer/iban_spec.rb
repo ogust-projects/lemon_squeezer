@@ -45,6 +45,7 @@ module LemonSqueezer
         iban.register
         expect(iban.id).to be_a(Fixnum)
         expect(iban.status).to be_a(Fixnum)
+        expect(iban.error).to be_nil
       end
 
       it "return an error" do
