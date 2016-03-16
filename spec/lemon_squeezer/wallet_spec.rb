@@ -2,14 +2,14 @@ require "spec_helper"
 
 module LemonSqueezer
   describe Wallet do
-    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: LemonSqueezer.configuration.login}) }
+    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr'}) }
     let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com'}) }
     let(:no_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_get_details) {
       LemonSqueezer.wallet_get_details(
                                         {
                                           id: 'sc',
-                                          email: LemonSqueezer.configuration.login
+                                          email: 'society@lemonway.fr'
                                         }
                                       )
     }
@@ -19,7 +19,8 @@ module LemonSqueezer
                                     id: random_string,
                                     email: random_email,
                                     first_name: random_string,
-                                    last_name: random_string
+                                    last_name: random_string,
+                                    technical: 1
                                   }
                                 )
     }
@@ -27,7 +28,7 @@ module LemonSqueezer
       LemonSqueezer::Wallet.new(
                                   {
                                     id: 'sc',
-                                    email: LemonSqueezer.configuration.login,
+                                    email: 'society@lemonway.fr',
                                     first_name: random_string,
                                     last_name: random_string
                                   }
@@ -42,6 +43,12 @@ module LemonSqueezer
                                         last_name: random_string
                                       }
                                     )
+    }
+    let(:update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12}) }
+    let(:invalid_update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404}) }
+    let(:no_update_wallet) { LemonSqueezer::Wallet.new }
+    let(:shortcut_wallet_update_status) {
+      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12})
     }
 
     describe "#get_details" do
@@ -62,6 +69,7 @@ module LemonSqueezer
         expect(main_wallet.iban).to be_a(Array)
         expect(main_wallet.status).to be_a(Fixnum)
         expect([true, false]).to include(main_wallet.blocked)
+        expect(main_wallet.error).to be_nil
       end
 
       it "return an error" do
@@ -90,6 +98,7 @@ module LemonSqueezer
         register_wallet.register
         expect(register_wallet.id).to be_a(String)
         expect(register_wallet.lwid).to be_a(String)
+        expect(register_wallet.error).to be_nil
       end
 
       it "return an error" do
@@ -102,6 +111,34 @@ module LemonSqueezer
         no_wallet.register
         expect(no_wallet.error).to be_a(Hash)
         expect(no_wallet.error[:code]).to eq -1
+      end
+    end
+
+    describe "#update_status" do
+      it "returns a LemonSqueezer::Wallet object" do
+        expect(update_wallet.update_status).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it "shortcut return a LemonSqueezer::Wallet object" do
+        expect(shortcut_wallet_update_status).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it "update status to rspecwallet_tech" do
+        update_wallet.update_status
+        expect(update_wallet.id).to be_a(String)
+        expect(update_wallet.error).to be_nil
+      end
+
+      it "return an error" do
+        invalid_update_wallet.update_status
+        expect(invalid_update_wallet.error).to be_a(Hash)
+        expect(invalid_update_wallet.error[:code]).not_to eq -1
+      end
+
+      it "return an error 250" do
+        no_update_wallet.update_status
+        expect(no_update_wallet.error).to be_a(Hash)
+        expect(no_update_wallet.error[:code]).to eq -1
       end
     end
   end

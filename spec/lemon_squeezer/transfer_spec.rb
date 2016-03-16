@@ -79,6 +79,7 @@ module LemonSqueezer
         expect(transfer.commission).to be_a(Float)
         expect(transfer.status).to be_a(Fixnum)
         expect(transfer.transfered_at).to be_a(DateTime)
+        expect(transfer.error).to be_nil
       end
 
       it "return an error" do
@@ -112,6 +113,7 @@ module LemonSqueezer
         expect(transfer_ext.commission).to be_a(Float)
         expect(transfer_ext.status).to be_a(Fixnum)
         expect(transfer_ext.transfered_at).to be_a(DateTime)
+        expect(transfer_ext.error).to be_nil
       end
 
       it "return an error" do

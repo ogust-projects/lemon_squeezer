@@ -30,6 +30,18 @@ module LemonSqueezer
     Card.new(params).fast_pay
   end
 
+  def self.card_money_in_with_card_id(params = {})
+    Card.new(params).money_in_with_card_id
+  end
+
+  def self.card_money_in(params = {})
+    Card.new(params).money_in
+  end
+
+  def self.card_register(params = {})
+    Card.new(params).register
+  end
+
   def self.iban_register(params = {})
     Iban.new(params).register
   end
@@ -40,6 +52,10 @@ module LemonSqueezer
 
   def self.wallet_register(params = {})
     Wallet.new(params).register
+  end
+
+  def self.wallet_update_status(params = {})
+    Wallet.new(params).update_status
   end
 
   def self.transfer_money_out(params = {})

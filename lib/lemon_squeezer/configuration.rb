@@ -1,10 +1,11 @@
 module LemonSqueezer
   class Configuration
-    attr_accessor :login, :password, :language, :production, :log
+    attr_accessor :login, :password, :language, :production, :log, :directkit_wsdl
 
     def initialize
-      @production = false
-      @log        = true
+      @production     = false
+      @log            = true
+      @directkit_wsdl = ""
     end
 
     def client
@@ -12,16 +13,9 @@ module LemonSqueezer
                     log: self.log,
                     env_namespace: :soapenv,
                     headers: {},
-                    wsdl: directkit_wsdl
+                    basic_auth: [self.login, self.password],
+                    wsdl: self.directkit_wsdl
                   )
-    end
-
-    def directkit_wsdl
-      if @production
-        ""
-      else
-        "https://ws.lemonway.fr/mb/demo/dev/directkitjson/service.asmx?WSDL"
-      end
     end
 
     def auth
@@ -35,7 +29,7 @@ module LemonSqueezer
     end
 
     def public_ip
-      @public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
+      '46.101.130.8' #@public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
     end
   end
 end
