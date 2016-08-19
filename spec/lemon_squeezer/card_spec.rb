@@ -169,7 +169,6 @@ module LemonSqueezer
 
       it "pay with a registred card to rspecwallet wallet" do
         card_money_in_with_card_id.money_in_with_card_id
-        binding.pry
         expect(card_money_in_with_card_id.id).to be_a(String)
         expect(card_money_in_with_card_id.from_moneyin).to be_a(String)
         expect(card_money_in_with_card_id.card_number).to be_a(String)

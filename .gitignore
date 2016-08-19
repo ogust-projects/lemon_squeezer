@@ -8,6 +8,10 @@
 /spec/reports/
 /tmp/
 
+
+## Directory-based project format:
+.idea/
+
 # Ignore application configuration
 /.env
 
