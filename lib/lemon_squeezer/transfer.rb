@@ -62,7 +62,7 @@ module LemonSqueezer
 
       params.merge!(debitWallet: self.sender) if self.sender
       params.merge!(creditWallet: self.receiver) if self.receiver
-      params.merge!(amount: self.amount) if self.amount
+      params.merge!(amount: format_amount(self.amount)) if self.amount
 
       params
     end
@@ -83,7 +83,7 @@ module LemonSqueezer
       params = {}
 
       params.merge!(wallet: self.sender) if self.sender
-      params.merge!(amountTot: self.amount) if self.amount
+      params.merge!(amountTot: format_amount(self.amount)) if self.amount
       params.merge!(autoCommission: self.auto_comission) if self.auto_comission
 
       params
@@ -99,6 +99,10 @@ module LemonSqueezer
       message.merge!(ibanId: self.iban_id) if self.iban_id
 
       message
+    end
+
+    def format_amount(amount)
+      "%.2f" %amount
     end
   end
 end

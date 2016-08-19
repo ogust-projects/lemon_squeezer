@@ -113,13 +113,19 @@ module LemonSqueezer
 
       it "pay with a card to rspecwallet wallet" do
         card_money_in.money_in
-        expect(card_money_in.id).to be_a(String)
+        if card_money_in.error.blank?
+          expect(card_money_in.id).to be_a(String)
+          expect(card_money_in.credit).to be_a(BigDecimal)
+          expect(card_money_in.commission).to be_a(BigDecimal)
+          expect(card_money_in.status).to be_a(Fixnum)
+        else
+          expect(card_money_in.id).to be_nil
+          expect(card_money_in.credit).to be_nil
+          expect(card_money_in.commission).to be_nil
+          expect(card_money_in.status).to be_nil
+        end
         expect(card_money_in.card_number).to be_a(String)
         expect(card_money_in.receiver).to be_a(String)
-        expect(card_money_in.credit).to be_a(BigDecimal)
-        expect(card_money_in.commission).to be_a(BigDecimal)
-        expect(card_money_in.status).to be_a(Fixnum)
-        expect(card_money_in.error).to be_nil
       end
 
       it "return an error" do
@@ -169,15 +175,23 @@ module LemonSqueezer
 
       it "pay with a registred card to rspecwallet wallet" do
         card_money_in_with_card_id.money_in_with_card_id
-        binding.pry
-        expect(card_money_in_with_card_id.id).to be_a(String)
-        expect(card_money_in_with_card_id.from_moneyin).to be_a(String)
-        expect(card_money_in_with_card_id.card_number).to be_a(String)
+
+        if card_money_in_with_card_id.error.blank?
+          expect(card_money_in_with_card_id.id).to be_a(String)
+          expect(card_money_in_with_card_id.credit).to be_a(BigDecimal)
+          expect(card_money_in_with_card_id.commission).to be_a(BigDecimal)
+          expect(card_money_in_with_card_id.status).to be_a(Fixnum)
+          expect(card_money_in_with_card_id.card_number).to be_a(String)
+          expect(card_money_in_with_card_id.from_moneyin).to be_a(String)
+        else
+          expect(card_money_in_with_card_id.id).to be_nil
+          expect(card_money_in_with_card_id.credit).to be_nil
+          expect(card_money_in_with_card_id.commission).to be_nil
+          expect(card_money_in_with_card_id.status).to be_nil
+          expect(card_money_in_with_card_id.card_number).to be_nil
+          expect(card_money_in_with_card_id.from_moneyin).to be_nil
+        end
         expect(card_money_in_with_card_id.receiver).to be_a(String)
-        expect(card_money_in_with_card_id.credit).to be_a(BigDecimal)
-        expect(card_money_in_with_card_id.commission).to be_a(BigDecimal)
-        expect(card_money_in_with_card_id.status).to be_a(Fixnum)
-        expect(card_money_in_with_card_id.error).to be_nil
       end
 
       it "return an error" do

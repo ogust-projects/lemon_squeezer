@@ -4,20 +4,20 @@ module LemonSqueezer
   describe Transfer do
     let(:transfer) {
       LemonSqueezer::Transfer.new(
-        {
-          sender: 'sc',
-          receiver: 'rspecwallet',
-          amount: 42.42
-        }
+          {
+              sender:   'sc',
+              receiver: 'rspecwallet',
+              amount:   42.42
+          }
       )
     }
     let(:invalid_transfer) {
       LemonSqueezer::Transfer.new(
-        {
-          sender: 'sc',
-          receiver: 'sc',
-          amount: 42.42
-        }
+          {
+              sender:   'sc',
+              receiver: 'sc',
+              amount:   42.42
+          }
       )
     }
     let(:no_transfer) { LemonSqueezer::Transfer.new }
@@ -28,35 +28,35 @@ module LemonSqueezer
     let(:bank) { Ibanizator.bank_db.bank_by_bic(bic) }
     let(:iban) {
       LemonSqueezer::Iban.new(
-        {
-          wallet: 'rspecwallet',
-          holder: random_string,
-          bic: bic,
-          iban: iban_de,
-          agency: bank.name,
-          address: random_string
-        }
+          {
+              wallet:  'rspecwallet',
+              holder:  random_string,
+              bic:     bic,
+              iban:    iban_de,
+              agency:  bank.name,
+              address: random_string
+          }
       ).register
     }
 
     let(:transfer_ext) {
       LemonSqueezer::Transfer.new(
-        {
-          sender: 'rspecwallet',
-          iban_id: iban.id,
-          amount: 10.00,
-          auto_comission: 0
-        }
+          {
+              sender:         'rspecwallet',
+              iban_id:        iban.id,
+              amount:         10.00,
+              auto_comission: 0
+          }
       )
     }
     let(:invalid_transfer_ext) {
       LemonSqueezer::Transfer.new(
-        {
-          sender: 'rspecwallet_error',
-          iban_id: iban.id,
-          amount: 10.00,
-          auto_comission: 0
-        }
+          {
+              sender:         'rspecwallet_error',
+              iban_id:        iban.id,
+              amount:         10.00,
+              auto_comission: 0
+          }
       )
     }
     let(:no_transfer_ext) { LemonSqueezer::Transfer.new }
@@ -73,13 +73,21 @@ module LemonSqueezer
 
       it "send payment between main wallet and a supplier wallet" do
         transfer.send_payment
-        expect(transfer.id).to be_a(String)
-        expect(transfer.debit).to be_a(Float)
-        expect(transfer.credit).to be_a(Float)
-        expect(transfer.commission).to be_a(Float)
-        expect(transfer.status).to be_a(Fixnum)
-        expect(transfer.transfered_at).to be_a(DateTime)
-        expect(transfer.error).to be_nil
+        if transfer.error.blank?
+          expect(transfer.id).to be_a(String)
+          expect(transfer.debit).to be_a(Float)
+          expect(transfer.credit).to be_a(Float)
+          expect(transfer.commission).to be_a(Float)
+          expect(transfer.status).to be_a(Fixnum)
+          expect(transfer.transfered_at).to be_a(DateTime)
+        else
+          expect(transfer.id).to be_nil
+          expect(transfer.debit).to be_nil
+          expect(transfer.credit).to be_nil
+          expect(transfer.commission).to be_nil
+          expect(transfer.status).to be_nil
+          expect(transfer.transfered_at).to be_nil
+        end
       end
 
       it "return an error" do
