@@ -50,6 +50,13 @@ module LemonSqueezer
     let(:shortcut_wallet_update_status) {
       LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12})
     }
+    let(:file_to_upload) { Base64.encode64(File.open("./spec/fixtures/files/upload_test.pdf", "rb").read) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload }) }
+    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload }) }
+    let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
+    let(:shortcut_wallet_upload_file) {
+      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload })
+    }
 
     describe "#get_details" do
       it "returns a LemonSqueezer::Wallet object" do
@@ -139,6 +146,34 @@ module LemonSqueezer
         no_update_wallet.update_status
         expect(no_update_wallet.error).to be_a(Hash)
         expect(no_update_wallet.error[:code]).to eq -1
+      end
+    end
+
+    describe "#upload_file" do
+      it "returns a LemonSqueezer::Wallet object" do
+        expect(upload_file_wallet.upload_file).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it "shortcut return a LemonSqueezer::Wallet object" do
+        expect(shortcut_wallet_upload_file).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it "update file to rspecwallet" do
+        upload_file_wallet.upload_file
+        expect(upload_file_wallet.document_id).to be_a(String)
+        expect(upload_file_wallet.error).to be_nil
+      end
+
+      it "return an error" do
+        invalid_upload_file_wallet.upload_file
+        expect(invalid_upload_file_wallet.error).to be_a(Hash)
+        expect(invalid_upload_file_wallet.error[:code]).not_to eq -1
+      end
+
+      it "return an error 250" do
+        no_upload_file_wallet.upload_file
+        expect(no_upload_file_wallet.error).to be_a(Hash)
+        expect(no_upload_file_wallet.error[:code]).to eq -1
       end
     end
   end

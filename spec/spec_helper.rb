@@ -150,7 +150,7 @@ end
 
 def random_string
   o = [('a'..'z'), ('A'..'Z')].map { |i| i.to_a }.flatten
-  (0...50).map { o[rand(o.length)] }.join
+  (0...6).map { o[rand(o.length)] }.join
 end
 
 def random_email

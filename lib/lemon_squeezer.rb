@@ -58,6 +58,10 @@ module LemonSqueezer
     Wallet.new(params).update_status
   end
 
+  def self.wallet_upload_file(params = {})
+    Wallet.new(params).upload_file
+  end
+
   def self.transfer_money_out(params = {})
     Transfer.new(params).money_out
   end

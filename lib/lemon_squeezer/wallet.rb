@@ -1,20 +1,28 @@
 module LemonSqueezer
   class Wallet
-    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :email, :iban, :status, :blocked, :error, :is_company, :company_name, :new_status, :technical
+    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :email, :iban, :status, :blocked, :error,
+    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id
 
     GET_DETAILS_PARAMS   = %i(wallet email)
     REGISTER_PARAMS      = %i(wallet clientMail clientFirstName clientLastName)
     UPDATE_STATUS_PARAMS = %i(wallet newStatus)
+    UPLOAD_FILE_PARAMS   = %i(wallet fileName type buffer)
+
+    FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'company_registration': 7 }
 
     def initialize(params = {})
       @id           = params[:id]
       @email        = params[:email]
       @first_name   = params[:first_name]
       @last_name    = params[:last_name]
+      @country      = params[:country]
       @is_company   = params[:is_company]
       @company_name = params[:company_name]
       @new_status   = params[:new_status]
       @technical    = params[:technical]
+      @file_name    = params[:file_name]
+      @type         = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
+      @buffer       = params[:buffer]
     end
 
     def get_details
@@ -56,9 +64,19 @@ module LemonSqueezer
       request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, :update_wallet_status, :wallet)
 
       Response.new(request).submit do |result, error|
-        if result
-          self.id   = result[:id]
-        end
+        self.id   = result[:id] if result
+
+        self.error = error
+      end
+
+      self
+    end
+
+    def upload_file
+      request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, :upload_file, :upload)
+
+      Response.new(request).submit do |result, error|
+        self.document_id   = result[:id] if result
 
         self.error = error
       end
@@ -71,8 +89,8 @@ module LemonSqueezer
     def get_details_params
       params = {}
 
-      params.merge!(wallet: self.id) if self.id
-      params.merge!(email: self.email) if self.email
+      params.merge!(wallet: id) if id
+      params.merge!(email: email) if email
 
       params
     end
@@ -88,10 +106,12 @@ module LemonSqueezer
     def register_params
       params = {}
 
-      params.merge!(wallet: self.id) if self.id
-      params.merge!(clientMail: self.email) if self.email
-      params.merge!(clientFirstName: self.first_name) if self.first_name
-      params.merge!(clientLastName: self.last_name) if self.last_name
+      params.merge!(wallet: id) if id
+      params.merge!(clientMail: email) if email
+      params.merge!(clientFirstName: first_name) if first_name
+      params.merge!(clientLastName: last_name) if last_name
+      params.merge!(isCompany: is_company) if is_company
+      params.merge!(ctry: country) if country
 
       params
     end
@@ -101,9 +121,9 @@ module LemonSqueezer
                   version: '1.7'
                 )
 
-      message.merge!(isCompany: self.is_company) if self.is_company
-      message.merge!(companyName: self.company_name) if self.company_name
-      message.merge!(isOneTimeCustomer: self.technical) if self.technical
+      message.merge!(isCompany: is_company) if is_company
+      message.merge!(companyName: company_name) if company_name
+      message.merge!(isOneTimeCustomer: technical) if technical
 
       message
     end
@@ -111,8 +131,8 @@ module LemonSqueezer
     def update_status_params
       params = {}
 
-      params.merge!(wallet: self.id) if self.id
-      params.merge!(newStatus: self.new_status) if self.new_status
+      params.merge!(wallet: id) if id
+      params.merge!(newStatus: new_status) if new_status
 
       params
     end
@@ -120,6 +140,25 @@ module LemonSqueezer
     def update_status_message
       message = update_status_params.merge!(
                   version: '1.0'
+                )
+
+      message
+    end
+
+    def upload_file_params
+      params = {}
+
+      params.merge!(wallet: id) if id
+      params.merge!(fileName: file_name) if file_name
+      params.merge!(type: type) if type
+      params.merge!(buffer: buffer) if buffer
+
+      params
+    end
+
+    def upload_file_message
+      message = upload_file_params.merge!(
+                  version: '1.1'
                 )
 
       message
