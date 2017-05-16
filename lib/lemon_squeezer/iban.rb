@@ -7,6 +7,7 @@ module LemonSqueezer
 
     def initialize(params = {})
       iban_test = Ibanizator.iban_from_string(params[:iban])
+      @config_name       = params[:config_name] || :DEFAULT
       if iban_test.valid?
         @wallet            = params[:wallet]
         @holder            = params[:holder]
@@ -16,7 +17,6 @@ module LemonSqueezer
         @address           = params[:address]
         @country           = iban_test.country_code
         @comment           = params[:comment]
-        @config_name       = params[:config_name] || :DEFAULT
       end
     end
 
