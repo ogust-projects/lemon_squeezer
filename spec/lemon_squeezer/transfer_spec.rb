@@ -2,7 +2,7 @@ require "spec_helper"
 
 module LemonSqueezer
   describe Transfer do
-    let(:transfer) {
+    let(:default_transfer) {
       LemonSqueezer::Transfer.new(
           {
               sender:   'sc',
@@ -11,12 +11,23 @@ module LemonSqueezer
           }
       )
     }
+    let(:transfer) {
+      LemonSqueezer::Transfer.new(
+          {
+              sender:   'sc',
+              receiver: 'rspecwallet',
+              amount:   42.42,
+              config_name: :EUR
+          }
+      )
+    }
     let(:invalid_transfer) {
       LemonSqueezer::Transfer.new(
           {
               sender:   'sc',
               receiver: 'sc',
-              amount:   42.42
+              amount:   42.42,
+              config_name: :EUR
           }
       )
     }
@@ -34,7 +45,8 @@ module LemonSqueezer
               bic:     bic,
               iban:    iban_de,
               agency:  bank.name,
-              address: random_string
+              address: random_string,
+              config_name: :EUR
           }
       ).register
     }
@@ -45,7 +57,8 @@ module LemonSqueezer
               sender:         'rspecwallet',
               iban_id:        iban.id,
               amount:         10.00,
-              auto_comission: 0
+              auto_comission: 0,
+              config_name: :EUR
           }
       )
     }
@@ -55,12 +68,19 @@ module LemonSqueezer
               sender:         'rspecwallet_error',
               iban_id:        iban.id,
               amount:         10.00,
-              auto_comission: 0
+              auto_comission: 0,
+              config_name: :EUR
           }
       )
     }
     let(:no_transfer_ext) { LemonSqueezer::Transfer.new }
     let(:shortcut_money_out) { LemonSqueezer.transfer_money_out }
+
+    describe ":DEFAULT" do
+      it "returns a LemonSqueezer::Transfer object" do
+        expect(default_transfer.send_payment).to be_a(LemonSqueezer::Transfer)
+      end
+    end
 
     describe "#send_payment" do
       it "returns a LemonSqueezer::Transfer object" do

@@ -2,7 +2,7 @@ module LemonSqueezer
   class Card
     attr_accessor :id, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount,
                   :card_type, :card_number, :card_crypto, :card_date, :message, :auto_commission, :register_card, :debit,
-                  :credit, :commission, :status, :error
+                  :credit, :commission, :status, :error, :config_name
 
     TYPES = %i(cb visa mastercard)
 
@@ -31,6 +31,7 @@ module LemonSqueezer
       @message           = params[:message]
       @auto_commission   = params[:auto_commission]
       @register_card     = params[:register_card]
+      @config_name       = params[:config_name] || :DEFAULT
     end
 
     def card_type_label
@@ -38,7 +39,7 @@ module LemonSqueezer
     end
 
     def fast_pay
-      request = Request.new(FAST_PAY_PARAMS, fast_pay_params, fast_pay_message, :fast_pay, :trans)
+      request = Request.new(FAST_PAY_PARAMS, fast_pay_params, fast_pay_message, self.config_name, :fast_pay, :trans)
 
       Response.new(request).submit do |result, error|
         if result
@@ -58,7 +59,7 @@ module LemonSqueezer
     end
 
     def money_in
-      request = Request.new(MONEY_IN_PARAMS, money_in_params, money_in_message, :money_in, :trans)
+      request = Request.new(MONEY_IN_PARAMS, money_in_params, money_in_message, self.config_name, :money_in, :trans)
 
       Response.new(request).submit do |result, error|
 
@@ -77,7 +78,7 @@ module LemonSqueezer
     end
 
     def money_in_with_card_id
-      request = Request.new(MONEY_IN_WITH_CARD_ID_PARAMS, money_in_with_card_id_params, money_in_with_card_id_message, :money_in_with_card_id, :trans, :money_in)
+      request = Request.new(MONEY_IN_WITH_CARD_ID_PARAMS, money_in_with_card_id_params, money_in_with_card_id_message, self.config_name, :money_in_with_card_id, :trans, :money_in)
 
       Response.new(request).submit do |result, error|
         if result
@@ -95,7 +96,7 @@ module LemonSqueezer
     end
 
     def register
-      request = Request.new(REGISTER_PARAMS, register_params, register_message, :register_card, :card)
+      request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, :register_card, :card)
 
       Response.new(request).submit do |result, error|
         if result

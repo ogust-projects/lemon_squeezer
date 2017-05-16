@@ -2,7 +2,7 @@ require "spec_helper"
 
 module LemonSqueezer
   describe Card do
-    let(:card) {
+    let(:default_card) {
       LemonSqueezer::Card.new(
         {
           sender: random_email,
@@ -19,6 +19,24 @@ module LemonSqueezer
         }
       )
     }
+    let(:card) {
+      LemonSqueezer::Card.new(
+        {
+          sender: random_email,
+          sender_first_name: random_string,
+          sender_last_name: random_string,
+          card_type: 1,
+          card_number: '5017670000006700',
+          card_crypto: '123',
+          card_date: (DateTime.now + 35).strftime("%m/%Y"),
+          receiver: 'sc',
+          amount: 234.56,
+          auto_commission: 0,
+          register_card: 1,
+          config_name: :EUR
+        }
+      )
+    }
     let(:invalid_card) {
       LemonSqueezer::Card.new(
         {
@@ -32,12 +50,19 @@ module LemonSqueezer
           receiver: 'sc',
           amount: 234.56,
           auto_commission: 0,
-          register_card: 1
+          register_card: 1,
+          config_name: :EUR
         }
       )
     }
     let(:no_card) { LemonSqueezer::Card.new }
     let(:shortcut_fast_pay) { LemonSqueezer.card_fast_pay }
+
+    describe ":DEFAULT" do
+      it "returns a LemonSqueezer::Wallet object" do
+        expect(default_card.fast_pay).to be_a(LemonSqueezer::Card)
+      end
+    end
 
     describe "#fast_pay" do
       it "returns a LemonSqueezer::Card object" do
@@ -82,7 +107,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -95,7 +121,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -147,7 +174,8 @@ module LemonSqueezer
           receiver: 'rspecwallet',
           card_id: card_registered.register.id,
           amount: 234.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -157,7 +185,8 @@ module LemonSqueezer
           receiver: random_string,
           card_id: card_registered.register.id,
           amount: 234.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -214,7 +243,8 @@ module LemonSqueezer
           card_number: '5017670000006700',
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
-          receiver: 'rspecwallet_tech'
+          receiver: 'rspecwallet_tech',
+          config_name: :EUR
         }
       )
     }
@@ -225,7 +255,8 @@ module LemonSqueezer
           card_number: '5017670000006700',
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
-          receiver: random_string
+          receiver: random_string,
+          config_name: :EUR
         }
       )
     }
