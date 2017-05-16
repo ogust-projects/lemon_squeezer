@@ -52,33 +52,33 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     LemonSqueezer.configure do |config|
-      config.production     = false
-      config.configs        = {
-                                :DEFAULT => {
-                                        :log            => ENV["LEMONWAY_LOG_EUR"] == 'true',
-                                        :directkit_wsdl => ENV["LEMONWAY_DIRECTKIT_WSDL_EUR"],
-                                        :login          => ENV["LEMONWAY_LOGIN_EUR"],
-                                        :password       => ENV["LEMONWAY_PASSWORD_EUR"],
-                                        :language       => ENV["LEMONWAY_LANGUAGE_EUR"]
-                                        },
-                                :EUR => {
-                                        :log            => ENV["LEMONWAY_LOG_EUR"] == 'true',
-                                        :directkit_wsdl => ENV["LEMONWAY_DIRECTKIT_WSDL_EUR"],
-                                        :login          => ENV["LEMONWAY_LOGIN_EUR"],
-                                        :password       => ENV["LEMONWAY_PASSWORD_EUR"],
-                                        :language       => ENV["LEMONWAY_LANGUAGE_EUR"]
-                                        },
-                                :CAD => {
-                                        :log            => ENV["LEMONWAY_LOG_CAD"] == 'true',
-                                        :directkit_wsdl => ENV["LEMONWAY_DIRECTKIT_WSDL_CAD"],
-                                        :login          => ENV["LEMONWAY_LOGIN_CAD"],
-                                        :password       => ENV["LEMONWAY_PASSWORD_CAD"],
-                                        :language       => ENV["LEMONWAY_LANGUAGE_CAD"]
-                                        }
-                              }
+      config.production = false
+      config.configs    = {
+                          DEFAULT: {
+                            log:            ENV['LEMONWAY_LOG_EUR'] == 'true',
+                            directkit_wsdl: ENV['LEMONWAY_DIRECTKIT_WSDL_EUR'],
+                            login:          ENV['LEMONWAY_LOGIN_EUR'],
+                            password:       ENV['LEMONWAY_PASSWORD_EUR'],
+                            language:       ENV['LEMONWAY_LANGUAGE_EUR']
+                          },
+                          EUR: {
+                            log:            ENV['LEMONWAY_LOG_EUR'] == 'true',
+                            directkit_wsdl: ENV['LEMONWAY_DIRECTKIT_WSDL_EUR'],
+                            login:          ENV['LEMONWAY_LOGIN_EUR'],
+                            password:       ENV['LEMONWAY_PASSWORD_EUR'],
+                            language:       ENV['LEMONWAY_LANGUAGE_EUR']
+                          },
+                          CAD: {
+                            log:            ENV['LEMONWAY_LOG_CAD'] == 'true',
+                            directkit_wsdl: ENV['LEMONWAY_DIRECTKIT_WSDL_CAD'],
+                            login:          ENV['LEMONWAY_LOGIN_CAD'],
+                            password:       ENV['LEMONWAY_PASSWORD_CAD'],
+                            language:       ENV['LEMONWAY_LANGUAGE_CAD']
+                          }
+                        }
     end
 
-    rspec_wallet = LemonSqueezer.wallet_get_details({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com', config_name: :EUR})
+    rspec_wallet = LemonSqueezer.wallet_get_details(id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com', config_name: :EUR)
 
     unless rspec_wallet.error.nil?
       rspec_wallet.first_name = 'RSpec'
@@ -86,7 +86,7 @@ RSpec.configure do |config|
       rspec_wallet.register
     end
 
-    rspec_wallet_technique = LemonSqueezer.wallet_get_details({id: 'rspecwallet_tech', email: 'rspecwallet_tech@rspecwallet.com', config_name: :EUR})
+    rspec_wallet_technique = LemonSqueezer.wallet_get_details(id: 'rspecwallet_tech', email: 'rspecwallet_tech@rspecwallet.com', config_name: :EUR)
 
     unless rspec_wallet_technique.error.nil?
       rspec_wallet_technique.first_name = 'RSpec'
