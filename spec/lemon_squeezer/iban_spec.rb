@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LemonSqueezer
   describe Iban do
@@ -46,35 +46,35 @@ module LemonSqueezer
     let(:no_iban) { LemonSqueezer::Iban.new }
     let(:shortcut_iban_register) { LemonSqueezer.iban_register }
 
-    describe ":DEFAULT" do
-      it "returns a LemonSqueezer::Wallet object" do
+    describe ':DEFAULT' do
+      it 'returns a LemonSqueezer::Wallet object' do
         expect(default_iban.register).to be_a(LemonSqueezer::Iban)
       end
     end
 
-    describe "#register" do
-      it "returns a LemonSqueezer::Iban object" do
+    describe '#register' do
+      it 'returns a LemonSqueezer::Iban object' do
         expect(iban.register).to be_a(LemonSqueezer::Iban)
       end
 
-      it "shortcut return a LemonSqueezer::Iban object" do
+      it 'shortcut return a LemonSqueezer::Iban object' do
         expect(shortcut_iban_register).to be_a(LemonSqueezer::Iban)
       end
 
-      it "register an IBAN to RSpec wallet" do
+      it 'register an IBAN to RSpec wallet' do
         iban.register
         expect(iban.id).to be_a(Fixnum)
         expect(iban.status).to be_a(Fixnum)
         expect(iban.error).to be_nil
       end
 
-      it "return an error" do
+      it 'return an error' do
         invalid_iban.register
         expect(invalid_iban.error).to be_a(Hash)
         expect(invalid_iban.error[:code]).not_to eq -1
       end
 
-      it "return error 250" do
+      it 'return error 250' do
         no_iban.register
         expect(no_iban.error).to be_a(Hash)
         expect(no_iban.error[:code]).to eq -1

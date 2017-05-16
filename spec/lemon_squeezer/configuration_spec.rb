@@ -1,17 +1,17 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LemonSqueezer
   describe Configuration do
-    describe "#production" do
-      it "default value is false" do
+    describe '#production' do
+      it 'default value is false' do
         config = Configuration.new
 
         expect(config.production).to eq(false)
       end
     end
 
-    describe "#production=" do
-      it "can set value" do
+    describe '#production=' do
+      it 'can set value' do
         config            = Configuration.new
         config.production = true
 
@@ -19,8 +19,8 @@ module LemonSqueezer
       end
     end
 
-    describe "#configs=" do
-      it "can set value" do
+    describe '#configs=' do
+      it 'can set value' do
         config       = Configuration.new
         config.configs = {:EUR => {:login => 'login@lemonway.fr'}}
 
