@@ -62,6 +62,13 @@ module LemonSqueezer
     let(:shortcut_wallet_upload_file) {
       LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR })
     }
+    let(:file_to_upload) { Base64.encode64(File.open("./spec/fixtures/files/upload_test.pdf", "rb").read) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload }) }
+    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload }) }
+    let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
+    let(:shortcut_wallet_upload_file) {
+      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload })
+    }
 
     describe ":DEFAULT" do
       it "returns a LemonSqueezer::Wallet object" do
