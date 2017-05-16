@@ -53,14 +53,25 @@ RSpec.configure do |config|
   config.before(:suite) do
     LemonSqueezer.configure do |config|
       config.production     = false
-      config.log            = ENV["LEMONWAY_LOG"] == 'true'
-      config.directkit_wsdl = ENV["LEMONWAY_DIRECTKIT_WSDL"]
-      config.login          = ENV["LEMONWAY_LOGIN"]
-      config.password       = ENV["LEMONWAY_PASSWORD"]
-      config.language       = ENV["LEMONWAY_LANGUAGE"]
+      config.configs        = {
+                                :EUR => {
+                                        :log            => ENV["LEMONWAY_LOG_EUR"] == 'true',
+                                        :directkit_wsdl => ENV["LEMONWAY_DIRECTKIT_WSDL_EUR"],
+                                        :login          => ENV["LEMONWAY_LOGIN_EUR"],
+                                        :password       => ENV["LEMONWAY_PASSWORD_EUR"],
+                                        :language       => ENV["LEMONWAY_LANGUAGE_EUR"]
+                                        },
+                                :CAD => {
+                                        :log            => ENV["LEMONWAY_LOG_CAD"] == 'true',
+                                        :directkit_wsdl => ENV["LEMONWAY_DIRECTKIT_WSDL_CAD"],
+                                        :login          => ENV["LEMONWAY_LOGIN_CAD"],
+                                        :password       => ENV["LEMONWAY_PASSWORD_CAD"],
+                                        :language       => ENV["LEMONWAY_LANGUAGE_CAD"]
+                                        }
+                              }
     end
 
-    rspec_wallet = LemonSqueezer.wallet_get_details({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com'})
+    rspec_wallet = LemonSqueezer.wallet_get_details({id: 'rspecwallet', email: 'rspecwallet@rspecwallet.com', config_name: :EUR})
 
     unless rspec_wallet.error.nil?
       rspec_wallet.first_name = 'RSpec'
@@ -68,7 +79,7 @@ RSpec.configure do |config|
       rspec_wallet.register
     end
 
-    rspec_wallet_technique = LemonSqueezer.wallet_get_details({id: 'rspecwallet_tech', email: 'rspecwallet_tech@rspecwallet.com'})
+    rspec_wallet_technique = LemonSqueezer.wallet_get_details({id: 'rspecwallet_tech', email: 'rspecwallet_tech@rspecwallet.com', config_name: :EUR})
 
     unless rspec_wallet_technique.error.nil?
       rspec_wallet_technique.first_name = 'RSpec'
@@ -76,7 +87,7 @@ RSpec.configure do |config|
       rspec_wallet_technique.register
     end
 
-    LemonSqueezer.wallet_update_status(id: 'rspecwallet_tech', new_status: '6') unless rspec_wallet_technique.status == 6
+    LemonSqueezer.wallet_update_status(id: 'rspecwallet_tech', new_status: '6', config_name: :EUR) unless rspec_wallet_technique.status == 6
 
     card_money_in = LemonSqueezer::Card.new(
       {
@@ -86,7 +97,8 @@ RSpec.configure do |config|
         card_crypto: '123',
         card_date: (DateTime.now + 35).strftime("%m/%Y"),
         amount: 200.00,
-        auto_commission: 0
+        auto_commission: 0,
+        config_name: :EUR
       }
     )
 

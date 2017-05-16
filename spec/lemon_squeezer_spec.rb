@@ -10,10 +10,10 @@ describe LemonSqueezer do
       end
 
       it "returns WSDL for test" do
-        directkit_wsdl = LemonSqueezer.configuration.directkit_wsdl
+        directkit_wsdl = LemonSqueezer.configuration.configs[:EUR][:directkit_wsdl]
 
         expect(directkit_wsdl).to be_a(String)
-        expect(directkit_wsdl).to eq ENV["LEMONWAY_DIRECTKIT_WSDL"]
+        expect(directkit_wsdl).to eq ENV["LEMONWAY_DIRECTKIT_WSDL_EUR"]
       end
 
       after :each do
@@ -27,12 +27,12 @@ describe LemonSqueezer do
       before :each do
         LemonSqueezer.configure do |config|
           config.production     = true
-          config.directkit_wsdl = "https://ws.lemonway.fr/mb/demo/dev/directkitjson/service.asmx?WSDL"
+          config.configs = {:EUR => {:directkit_wsdl => "https://ws.lemonway.fr/mb/demo/dev/directkitjson/service.asmx?WSDL"}}
         end
       end
 
       it "returns WSDL for test" do
-        directkit_wsdl = LemonSqueezer.configuration.directkit_wsdl
+        directkit_wsdl = LemonSqueezer.configuration.configs[:EUR][:directkit_wsdl]
 
         expect(directkit_wsdl).to be_a(String)
         expect(directkit_wsdl).to eq "https://ws.lemonway.fr/mb/demo/dev/directkitjson/service.asmx?WSDL"

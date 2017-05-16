@@ -19,30 +19,12 @@ module LemonSqueezer
       end
     end
 
-    describe "#login=" do
+    describe "#configs=" do
       it "can set value" do
         config       = Configuration.new
-        config.login = 'login@lemonway.fr'
+        config.configs = {:EUR => {:login => 'login@lemonway.fr'}}
 
-        expect(config.login).to eq('login@lemonway.fr')
-      end
-    end
-
-    describe "#password=" do
-      it "can set value" do
-        config          = Configuration.new
-        config.password = 'mysecurepassword'
-
-        expect(config.password).to eq('mysecurepassword')
-      end
-    end
-
-    describe "#language=" do
-      it "can set value" do
-        config          = Configuration.new
-        config.language = 'fr'
-
-        expect(config.language).to eq('fr')
+        expect(config.configs[:EUR][:login]).to eq('login@lemonway.fr')
       end
     end
   end

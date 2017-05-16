@@ -2,14 +2,15 @@ require "spec_helper"
 
 module LemonSqueezer
   describe Wallet do
-    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr'}) }
-    let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com'}) }
+    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', config_name: :EUR}) }
+    let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com', config_name: :EUR}) }
     let(:no_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_get_details) {
       LemonSqueezer.wallet_get_details(
                                         {
                                           id: 'sc',
-                                          email: 'society@lemonway.fr'
+                                          email: 'society@lemonway.fr',
+                                          config_name: :EUR
                                         }
                                       )
     }
@@ -20,7 +21,8 @@ module LemonSqueezer
                                     email: random_email,
                                     first_name: random_string,
                                     last_name: random_string,
-                                    technical: 1
+                                    technical: 1,
+                                    config_name: :EUR
                                   }
                                 )
     }
@@ -30,7 +32,8 @@ module LemonSqueezer
                                     id: 'sc',
                                     email: 'society@lemonway.fr',
                                     first_name: random_string,
-                                    last_name: random_string
+                                    last_name: random_string,
+                                    config_name: :EUR
                                   }
                                 )
     }
@@ -40,22 +43,23 @@ module LemonSqueezer
                                         id: random_string,
                                         email: random_email,
                                         first_name: random_string,
-                                        last_name: random_string
+                                        last_name: random_string,
+                                        config_name: :EUR
                                       }
                                     )
     }
-    let(:update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12}) }
-    let(:invalid_update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404}) }
+    let(:update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12, config_name: :EUR}) }
+    let(:invalid_update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404, config_name: :EUR}) }
     let(:no_update_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_update_status) {
-      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12})
+      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR})
     }
     let(:file_to_upload) { Base64.encode64(File.open("./spec/fixtures/files/upload_test.pdf", "rb").read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload }) }
-    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload }) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR }) }
+    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR }) }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_upload_file) {
-      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload })
+      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR })
     }
 
     describe "#get_details" do

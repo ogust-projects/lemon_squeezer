@@ -13,7 +13,8 @@ module LemonSqueezer
           bic: bic,
           iban: iban_de,
           agency: bank.name,
-          address: random_string
+          address: random_string,
+          config_name: :EUR
         }
       )
     }
@@ -25,7 +26,8 @@ module LemonSqueezer
           bic: 'bic',
           iban: iban_de,
           agency: bank.name,
-          address: random_string
+          address: random_string,
+          config_name: :EUR
         }
       )
     }

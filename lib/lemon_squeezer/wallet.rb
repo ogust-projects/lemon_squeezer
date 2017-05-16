@@ -1,7 +1,7 @@
 module LemonSqueezer
   class Wallet
     attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :email, :iban, :status, :blocked, :error,
-    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id
+    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name
 
     GET_DETAILS_PARAMS   = %i(wallet email)
     REGISTER_PARAMS      = %i(wallet clientMail clientFirstName clientLastName)
@@ -11,22 +11,23 @@ module LemonSqueezer
     FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'company_registration': 7 }
 
     def initialize(params = {})
-      @id           = params[:id]
-      @email        = params[:email]
-      @first_name   = params[:first_name]
-      @last_name    = params[:last_name]
-      @country      = params[:country]
-      @is_company   = params[:is_company]
-      @company_name = params[:company_name]
-      @new_status   = params[:new_status]
-      @technical    = params[:technical]
-      @file_name    = params[:file_name]
-      @type         = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
-      @buffer       = params[:buffer]
+      @id                = params[:id]
+      @email             = params[:email]
+      @first_name        = params[:first_name]
+      @last_name         = params[:last_name]
+      @country           = params[:country]
+      @is_company        = params[:is_company]
+      @company_name      = params[:company_name]
+      @new_status        = params[:new_status]
+      @technical         = params[:technical]
+      @file_name         = params[:file_name]
+      @type              = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
+      @buffer            = params[:buffer]
+      @config_name       = params[:config_name]
     end
 
     def get_details
-      request = Request.new(GET_DETAILS_PARAMS, get_details_params, get_details_message, :get_wallet_details, :wallet)
+      request = Request.new(GET_DETAILS_PARAMS, get_details_params, get_details_message, self.config_name, :get_wallet_details, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -46,7 +47,7 @@ module LemonSqueezer
     end
 
     def register
-      request = Request.new(REGISTER_PARAMS, register_params, register_message, :register_wallet, :wallet)
+      request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, :register_wallet, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -61,7 +62,7 @@ module LemonSqueezer
     end
 
     def update_status
-      request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, :update_wallet_status, :wallet)
+      request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, self.config_name, :update_wallet_status, :wallet)
 
       Response.new(request).submit do |result, error|
         self.id   = result[:id] if result
@@ -73,7 +74,7 @@ module LemonSqueezer
     end
 
     def upload_file
-      request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, :upload_file, :upload)
+      request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, self.config_name, :upload_file, :upload)
 
       Response.new(request).submit do |result, error|
         self.document_id   = result[:id] if result

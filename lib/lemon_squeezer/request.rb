@@ -1,11 +1,13 @@
 module LemonSqueezer
   class Request
-    attr_accessor :mandatory_params, :params, :message, :url, :root, :result
+    attr_accessor :mandatory_params, :params, :message, :config_name, :url, :root, :result
 
-    def initialize(mandatory_params, params, message, url, root, result = nil)
+    def initialize(mandatory_params, params, message, config_name, url, root, result = nil)
+      
       @mandatory_params = mandatory_params
       @params           = params
-      @message          = message.merge(LemonSqueezer.configuration.auth)
+      @config_name      = config_name
+      @message          = message.merge(LemonSqueezer.configuration.auth(config_name))
       @url              = url.to_sym
       @root             = root
       @result           = if result
@@ -16,7 +18,7 @@ module LemonSqueezer
     end
 
     def response
-      response =  LemonSqueezer.configuration.client.call(
+      response =  LemonSqueezer.configuration.client(self.config_name).call(
                     self.url,
                     message: self.message
                   )

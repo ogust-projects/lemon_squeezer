@@ -7,7 +7,8 @@ module LemonSqueezer
           {
               sender:   'sc',
               receiver: 'rspecwallet',
-              amount:   42.42
+              amount:   42.42,
+              config_name: :EUR
           }
       )
     }
@@ -16,7 +17,8 @@ module LemonSqueezer
           {
               sender:   'sc',
               receiver: 'sc',
-              amount:   42.42
+              amount:   42.42,
+              config_name: :EUR
           }
       )
     }
@@ -34,7 +36,8 @@ module LemonSqueezer
               bic:     bic,
               iban:    iban_de,
               agency:  bank.name,
-              address: random_string
+              address: random_string,
+              config_name: :EUR
           }
       ).register
     }
@@ -45,7 +48,8 @@ module LemonSqueezer
               sender:         'rspecwallet',
               iban_id:        iban.id,
               amount:         10.00,
-              auto_comission: 0
+              auto_comission: 0,
+              config_name: :EUR
           }
       )
     }
@@ -55,7 +59,8 @@ module LemonSqueezer
               sender:         'rspecwallet_error',
               iban_id:        iban.id,
               amount:         10.00,
-              auto_comission: 0
+              auto_comission: 0,
+              config_name: :EUR
           }
       )
     }

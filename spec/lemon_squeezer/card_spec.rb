@@ -15,7 +15,8 @@ module LemonSqueezer
           receiver: 'sc',
           amount: 234.56,
           auto_commission: 0,
-          register_card: 1
+          register_card: 1,
+          config_name: :EUR
         }
       )
     }
@@ -32,7 +33,8 @@ module LemonSqueezer
           receiver: 'sc',
           amount: 234.56,
           auto_commission: 0,
-          register_card: 1
+          register_card: 1,
+          config_name: :EUR
         }
       )
     }
@@ -82,7 +84,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -95,7 +98,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -147,7 +151,8 @@ module LemonSqueezer
           receiver: 'rspecwallet',
           card_id: card_registered.register.id,
           amount: 234.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -157,7 +162,8 @@ module LemonSqueezer
           receiver: random_string,
           card_id: card_registered.register.id,
           amount: 234.56,
-          auto_commission: 0
+          auto_commission: 0,
+          config_name: :EUR
         }
       )
     }
@@ -214,7 +220,8 @@ module LemonSqueezer
           card_number: '5017670000006700',
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
-          receiver: 'rspecwallet_tech'
+          receiver: 'rspecwallet_tech',
+          config_name: :EUR
         }
       )
     }
@@ -225,7 +232,8 @@ module LemonSqueezer
           card_number: '5017670000006700',
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
-          receiver: random_string
+          receiver: random_string,
+          config_name: :EUR
         }
       )
     }
