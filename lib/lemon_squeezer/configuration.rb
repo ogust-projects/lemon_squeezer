@@ -23,13 +23,13 @@ module LemonSqueezer
         wlLogin: self.configs[config_name][:login],
         wlPass: self.configs[config_name][:password],
         language: self.configs[config_name][:language],
-        walletIp: public_ip,
+        walletIp: public_ip(config_name),
         walletUa: 'powered by LemonSqueezer'
       }
     end
 
-    def public_ip
-      '46.101.130.8' #@public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
+    def public_ip(config_name)
+      self.configs[config_name][:public_ip] || '46.101.130.8' #@public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
     end
   end
 end
