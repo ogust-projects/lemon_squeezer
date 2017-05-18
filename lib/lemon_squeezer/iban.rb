@@ -17,6 +17,7 @@ module LemonSqueezer
         @address           = params[:address]
         @country           = iban_test.country_code
         @comment           = params[:comment]
+      end
     end
 
     def register
