@@ -1,21 +1,22 @@
 module LemonSqueezer
   class Iban
-    attr_accessor :id, :status, :wallet, :holder, :bic, :iban, :agency, :address, :country, :comment, :error
+    attr_accessor :id, :status, :wallet, :holder, :bic, :iban, :agency, :address, :country, :comment, :error, :config_name
 
     REGISTER_PARAMS_FR = %i(wallet holder iban)
     REGISTER_PARAMS_NOT_FR = %i(wallet holder iban bic dom1 dom2)
 
     def initialize(params = {})
       iban_test = Ibanizator.iban_from_string(params[:iban])
+      @config_name       = params[:config_name] || :DEFAULT
       if iban_test.valid?
-        @wallet  = params[:wallet]
-        @holder  = params[:holder]
-        @bic     = params[:bic]
-        @iban    = iban_test.to_s
-        @agency  = params[:agency]
-        @address = params[:address]
-        @country = iban_test.country_code
-        @comment = params[:comment]
+        @wallet            = params[:wallet]
+        @holder            = params[:holder]
+        @bic               = params[:bic]
+        @iban              = iban_test.to_s
+        @agency            = params[:agency]
+        @address           = params[:address]
+        @country           = iban_test.country_code
+        @comment           = params[:comment]
       end
     end
 
@@ -26,7 +27,7 @@ module LemonSqueezer
                           REGISTER_PARAMS_NOT_FR
                         end
 
-      request = Request.new(request_params, register_params, register_message, :register_iban, :iban)
+      request = Request.new(request_params, register_params, register_message, self.config_name, :register_iban, :iban)
 
       Response.new(request).submit do |result, error|
         if result
