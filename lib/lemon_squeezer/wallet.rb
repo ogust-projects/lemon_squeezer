@@ -23,7 +23,7 @@ module LemonSqueezer
       @file_name         = params[:file_name]
       @type              = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
       @buffer            = params[:buffer]
-      @config_name       = params[:config_name]
+      @config_name       = params[:config_name] || :DEFAULT
     end
 
     def get_details

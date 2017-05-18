@@ -14,7 +14,7 @@ module LemonSqueezer
       @scheduled_date = params[:scheduled_date]
       @private_data   = params[:private_data]
       @auto_comission = params[:auto_comission]
-      @config_name    = params[:config_name]
+      @config_name    = params[:config_name] || :DEFAULT
     end
 
     def send_payment

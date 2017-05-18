@@ -31,7 +31,7 @@ module LemonSqueezer
       @message           = params[:message]
       @auto_commission   = params[:auto_commission]
       @register_card     = params[:register_card]
-      @config_name       = params[:config_name]
+      @config_name       = params[:config_name] || :DEFAULT
     end
 
     def card_type_label

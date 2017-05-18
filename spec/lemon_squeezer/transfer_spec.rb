@@ -1,7 +1,17 @@
-require "spec_helper"
+require 'spec_helper'
 
 module LemonSqueezer
   describe Transfer do
+    let(:default_transfer) {
+      LemonSqueezer::Transfer.new(
+          {
+              sender:   'sc',
+              receiver: 'rspecwallet',
+              amount:   42.42,
+              config_name: :EUR
+          }
+      )
+    }
     let(:transfer) {
       LemonSqueezer::Transfer.new(
           {
@@ -67,16 +77,22 @@ module LemonSqueezer
     let(:no_transfer_ext) { LemonSqueezer::Transfer.new }
     let(:shortcut_money_out) { LemonSqueezer.transfer_money_out }
 
-    describe "#send_payment" do
-      it "returns a LemonSqueezer::Transfer object" do
+    describe ':DEFAULT' do
+      it 'returns a LemonSqueezer::Transfer object' do
+        expect(default_transfer.send_payment).to be_a(LemonSqueezer::Transfer)
+      end
+    end
+
+    describe '#send_payment' do
+      it 'returns a LemonSqueezer::Transfer object' do
         expect(transfer.send_payment).to be_a(LemonSqueezer::Transfer)
       end
 
-      it "shortcut return a LemonSqueezer::Transfer object" do
+      it 'shortcut return a LemonSqueezer::Transfer object' do
         expect(shortcut_send_payment).to be_a(LemonSqueezer::Transfer)
       end
 
-      it "send payment between main wallet and a supplier wallet" do
+      it 'send payment between main wallet and a supplier wallet' do
         transfer.send_payment
         if transfer.error.blank?
           expect(transfer.id).to be_a(String)
@@ -95,29 +111,29 @@ module LemonSqueezer
         end
       end
 
-      it "return an error" do
+      it 'return an error' do
         invalid_transfer.send_payment
         expect(invalid_transfer.error).to be_a(Hash)
         expect(invalid_transfer.error[:code]).not_to eq -1
       end
 
-      it "return error 250" do
+      it 'return error 250' do
         no_transfer.send_payment
         expect(no_transfer.error).to be_a(Hash)
         expect(no_transfer.error[:code]).to eq -1
       end
     end
 
-    describe "#money_out" do
-      it "returns a LemonSqueezer::Transfer object" do
+    describe '#money_out' do
+      it 'returns a LemonSqueezer::Transfer object' do
         expect(transfer_ext.money_out).to be_a(LemonSqueezer::Transfer)
       end
 
-      it "shortcut return a LemonSqueezer::Transfer object" do
+      it 'shortcut return a LemonSqueezer::Transfer object' do
         expect(shortcut_money_out).to be_a(LemonSqueezer::Transfer)
       end
 
-      it "send payment between a supplier wallet to his IBAN" do
+      it 'send payment between a supplier wallet to his IBAN' do
         transfer_ext.money_out
         expect(transfer_ext.id).to be_a(String)
         expect(transfer_ext.iban).to be_a(String)
@@ -129,13 +145,13 @@ module LemonSqueezer
         expect(transfer_ext.error).to be_nil
       end
 
-      it "return an error" do
+      it 'return an error' do
         invalid_transfer_ext.money_out
         expect(invalid_transfer_ext.error).to be_a(Hash)
         expect(invalid_transfer_ext.error[:code]).not_to eq -1
       end
 
-      it "return error 250" do
+      it 'return error 250' do
         no_transfer_ext.money_out
         expect(no_transfer_ext.error).to be_a(Hash)
         expect(no_transfer_ext.error[:code]).to eq -1
