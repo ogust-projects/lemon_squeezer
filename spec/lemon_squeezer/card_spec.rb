@@ -15,7 +15,8 @@ module LemonSqueezer
           receiver: 'sc',
           amount: 234.56,
           auto_commission: 0,
-          register_card: 1
+          register_card: 1,
+          config_name: :EUR
         }
       )
     }

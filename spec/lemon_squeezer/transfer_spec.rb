@@ -7,7 +7,8 @@ module LemonSqueezer
           {
               sender:   'sc',
               receiver: 'rspecwallet',
-              amount:   42.42
+              amount:   42.42,
+              config_name: :EUR
           }
       )
     }

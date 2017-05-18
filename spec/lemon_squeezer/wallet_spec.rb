@@ -67,7 +67,7 @@ module LemonSqueezer
     let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload }) }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_upload_file) {
-      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload })
+      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR })
     }
 
     describe ':DEFAULT' do
