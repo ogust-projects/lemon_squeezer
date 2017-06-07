@@ -1,6 +1,6 @@
 module LemonSqueezer
   class Transfer
-    attr_accessor :id, :sender, :receiver, :iban, :iban_id, :amount, :debit, :credit, :commission, :status, :error, :message, :scheduled_date, :private_data, :auto_comission, :transfered_at, :config_name
+    attr_accessor :id, :sender, :receiver, :iban, :iban_id, :amount, :debit, :credit, :commission, :status, :error, :message, :scheduled_date, :private_data, :auto_comission, :transfered_at, :config_name, :public_ip
 
     SEND_PAYMENT_PARAMS = %i(debitWallet creditWallet amount)
     MONEY_OUT_PARAMS = %i(wallet amountTot autoCommission)
@@ -15,10 +15,11 @@ module LemonSqueezer
       @private_data   = params[:private_data]
       @auto_comission = params[:auto_comission]
       @config_name    = params[:config_name] || :DEFAULT
+      @public_ip      = params[:public_ip]
     end
 
     def send_payment
-      request = Request.new(SEND_PAYMENT_PARAMS, send_payment_params, send_payment_message, self.config_name, :send_payment, :trans)
+      request = Request.new(SEND_PAYMENT_PARAMS, send_payment_params, send_payment_message, self.config_name, self.public_ip, :send_payment, :trans)
 
       Response.new(request).submit do |result, error|
         if result
@@ -37,7 +38,7 @@ module LemonSqueezer
     end
 
     def money_out
-      request = Request.new(MONEY_OUT_PARAMS, money_out_params, money_out_message, self.config_name, :money_out, :trans)
+      request = Request.new(MONEY_OUT_PARAMS, money_out_params, money_out_message, self.config_name, self.public_ip, :money_out, :trans)
 
       Response.new(request).submit do |result, error|
         if result

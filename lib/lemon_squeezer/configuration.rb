@@ -9,27 +9,25 @@ module LemonSqueezer
     end
 
     def client(config_name)
-      @clients[config_name] ||= Savon.client(
-                                log: self.configs[config_name][:log],
-                                env_namespace: :soapenv,
-                                headers: {},
-                                basic_auth: [self.configs[config_name][:login], self.configs[config_name][:password]],
-                                wsdl: self.configs[config_name][:directkit_wsdl]
-                              )
+      prms = {
+          log: self.configs[config_name][:log],
+          env_namespace: :soapenv,
+          headers: {},
+          basic_auth: [self.configs[config_name][:login], self.configs[config_name][:password]],
+          wsdl: self.configs[config_name][:directkit_wsdl]
+      }
+      prms[:proxy] = self.configs[config_name] if self.configs[config_name][:proxy]
+      @clients[config_name] ||= Savon.client(prms)
     end
 
-    def auth(config_name)
+    def auth(config_name, public_ip)
       {
         wlLogin: self.configs[config_name][:login],
         wlPass: self.configs[config_name][:password],
         language: self.configs[config_name][:language],
-        walletIp: public_ip(config_name),
+        walletIp: public_ip,# || '46.101.130.8',
         walletUa: 'powered by LemonSqueezer'
       }
-    end
-
-    def public_ip(config_name)
-      self.configs[config_name][:public_ip] || '46.101.130.8' #@public_ip ||= ::Net::HTTP.get(URI("https://api.ipify.org"))
     end
   end
 end
