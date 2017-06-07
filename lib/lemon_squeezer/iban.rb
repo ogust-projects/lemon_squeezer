@@ -1,6 +1,6 @@
 module LemonSqueezer
   class Iban
-    attr_accessor :id, :status, :wallet, :holder, :bic, :iban, :agency, :address, :country, :comment, :error, :config_name
+    attr_accessor :id, :status, :wallet, :holder, :bic, :iban, :agency, :address, :country, :comment, :error, :config_name, :public_ip
 
     REGISTER_PARAMS_FR = %i(wallet holder iban)
     REGISTER_PARAMS_NOT_FR = %i(wallet holder iban bic dom1 dom2)
@@ -17,6 +17,8 @@ module LemonSqueezer
         @address           = params[:address]
         @country           = iban_test.country_code
         @comment           = params[:comment]
+        @address           = params[:address]
+        @public_ip         = params[:public_ip]
       end
     end
 
@@ -27,7 +29,7 @@ module LemonSqueezer
                           REGISTER_PARAMS_NOT_FR
                         end
 
-      request = Request.new(request_params, register_params, register_message, self.config_name, :register_iban, :iban)
+      request = Request.new(request_params, register_params, register_message, self.config_name, self.public_ip, :register_iban, :iban)
 
       Response.new(request).submit do |result, error|
         if result

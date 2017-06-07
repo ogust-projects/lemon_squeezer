@@ -2,16 +2,17 @@ require 'spec_helper'
 
 module LemonSqueezer
   describe Wallet do
-    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', config_name: :EUR}) }
+    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', config_name: :EUR, public_ip: '46.101.130.8'}) }
     let(:default_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr'}) }
-    let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com', config_name: :EUR}) }
+    let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com', config_name: :EUR, public_ip: '46.101.130.8'}) }
     let(:no_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_get_details) {
       LemonSqueezer.wallet_get_details(
                                         {
                                           id: 'sc',
                                           email: 'society@lemonway.fr',
-                                          config_name: :EUR
+                                          config_name: :EUR,
+                                          public_ip: '46.101.130.8'
                                         }
                                       )
     }
@@ -23,7 +24,8 @@ module LemonSqueezer
                                     first_name: random_string,
                                     last_name: random_string,
                                     technical: 1,
-                                    config_name: :EUR
+                                    config_name: :EUR,
+                                    public_ip: '46.101.130.8'
                                   }
                                 )
     }
@@ -34,7 +36,8 @@ module LemonSqueezer
                                     email: 'society@lemonway.fr',
                                     first_name: random_string,
                                     last_name: random_string,
-                                    config_name: :EUR
+                                    config_name: :EUR,
+                                    public_ip: '46.101.130.8'
                                   }
                                 )
     }
@@ -45,29 +48,23 @@ module LemonSqueezer
                                         email: random_email,
                                         first_name: random_string,
                                         last_name: random_string,
-                                        config_name: :EUR
+                                        config_name: :EUR,
+                                        public_ip: '46.101.130.8'
                                       }
                                     )
     }
-    let(:update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12, config_name: :EUR}) }
-    let(:invalid_update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404, config_name: :EUR}) }
+    let(:update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'}) }
+    let(:invalid_update_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404, config_name: :EUR, public_ip: '46.101.130.8'}) }
     let(:no_update_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_update_status) {
-      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR})
+      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'})
     }
     let(:file_to_upload) { Base64.encode64(File.open('./spec/fixtures/files/upload_test.pdf', 'rb').read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR }) }
-    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR }) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
+    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_upload_file) {
-      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR })
-    }
-    let(:file_to_upload) { Base64.encode64(File.open('./spec/fixtures/files/upload_test.pdf', 'rb').read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload }) }
-    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload }) }
-    let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
-    let(:shortcut_wallet_upload_file) {
-      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR })
+      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' })
     }
 
     describe ':DEFAULT' do

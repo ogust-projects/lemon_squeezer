@@ -8,7 +8,8 @@ module LemonSqueezer
               sender:   'sc',
               receiver: 'rspecwallet',
               amount:   42.42,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       )
     }
@@ -18,7 +19,8 @@ module LemonSqueezer
               sender:   'sc',
               receiver: 'rspecwallet',
               amount:   42.42,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       )
     }
@@ -28,7 +30,8 @@ module LemonSqueezer
               sender:   'sc',
               receiver: 'sc',
               amount:   42.42,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       )
     }
@@ -47,7 +50,8 @@ module LemonSqueezer
               iban:    iban_de,
               agency:  bank.name,
               address: random_string,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       ).register
     }
@@ -59,7 +63,8 @@ module LemonSqueezer
               iban_id:        iban.id,
               amount:         10.00,
               auto_comission: 0,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       )
     }
@@ -70,7 +75,8 @@ module LemonSqueezer
               iban_id:        iban.id,
               amount:         10.00,
               auto_comission: 0,
-              config_name: :EUR
+              config_name: :EUR,
+              public_ip: '46.101.130.8'
           }
       )
     }

@@ -1,7 +1,7 @@
 module LemonSqueezer
   class Wallet
     attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :email, :iban, :status, :blocked, :error,
-    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name
+    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
     GET_DETAILS_PARAMS   = %i(wallet email)
     REGISTER_PARAMS      = %i(wallet clientMail clientFirstName clientLastName)
@@ -24,10 +24,11 @@ module LemonSqueezer
       @type              = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
       @buffer            = params[:buffer]
       @config_name       = params[:config_name] || :DEFAULT
+      @public_ip         = params[:public_ip]
     end
 
     def get_details
-      request = Request.new(GET_DETAILS_PARAMS, get_details_params, get_details_message, self.config_name, :get_wallet_details, :wallet)
+      request = Request.new(GET_DETAILS_PARAMS, get_details_params, get_details_message, self.config_name, self.public_ip, :get_wallet_details, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -47,7 +48,7 @@ module LemonSqueezer
     end
 
     def register
-      request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, :register_wallet, :wallet)
+      request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, self.public_ip, :register_wallet, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -62,7 +63,7 @@ module LemonSqueezer
     end
 
     def update_status
-      request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, self.config_name, :update_wallet_status, :wallet)
+      request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, self.config_name, self.public_ip, :update_wallet_status, :wallet)
 
       Response.new(request).submit do |result, error|
         self.id   = result[:id] if result
@@ -74,7 +75,7 @@ module LemonSqueezer
     end
 
     def upload_file
-      request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, self.config_name, :upload_file, :upload)
+      request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, self.config_name, self.public_ip, :upload_file, :upload)
 
       Response.new(request).submit do |result, error|
         self.document_id   = result[:id] if result

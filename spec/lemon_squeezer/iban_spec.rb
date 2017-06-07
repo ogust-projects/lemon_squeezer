@@ -14,7 +14,8 @@ module LemonSqueezer
           iban: iban_de,
           agency: bank.name,
           address: random_string,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -27,7 +28,8 @@ module LemonSqueezer
           iban: iban_de,
           agency: bank.name,
           address: random_string,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -40,7 +42,8 @@ module LemonSqueezer
           iban: iban_de,
           agency: bank.name,
           address: random_string,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
