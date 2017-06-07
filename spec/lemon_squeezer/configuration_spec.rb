@@ -27,14 +27,5 @@ module LemonSqueezer
         expect(config.configs[:EUR][:login]).to eq('login@lemonway.fr')
       end
     end
-
-    describe '#public_ip' do
-      it 'can set value' do
-        config       = Configuration.new
-        config.configs = {:EUR => {:public_ip => '8.8.8.8'}}
-
-        expect(config.public_ip(:EUR)).to eq('8.8.8.8')
-      end
-    end
   end
 end
