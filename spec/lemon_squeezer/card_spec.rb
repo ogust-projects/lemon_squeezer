@@ -16,7 +16,8 @@ module LemonSqueezer
           amount: 234.56,
           auto_commission: 0,
           register_card: 1,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -34,7 +35,8 @@ module LemonSqueezer
           amount: 234.56,
           auto_commission: 0,
           register_card: 1,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -52,7 +54,8 @@ module LemonSqueezer
           amount: 234.56,
           auto_commission: 0,
           register_card: 1,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -109,7 +112,8 @@ module LemonSqueezer
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
           auto_commission: 0,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -123,7 +127,8 @@ module LemonSqueezer
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           amount: 24.56,
           auto_commission: 0,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -176,7 +181,8 @@ module LemonSqueezer
           card_id: card_registered.register.id,
           amount: 234.56,
           auto_commission: 0,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -187,7 +193,8 @@ module LemonSqueezer
           card_id: card_registered.register.id,
           amount: 234.56,
           auto_commission: 0,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -245,7 +252,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           receiver: 'rspecwallet_tech',
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
@@ -257,7 +265,8 @@ module LemonSqueezer
           card_crypto: '123',
           card_date: (DateTime.now + 35).strftime("%m/%Y"),
           receiver: random_string,
-          config_name: :EUR
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
         }
       )
     }
