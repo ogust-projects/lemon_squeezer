@@ -17,7 +17,7 @@ module LemonSqueezer
             basic_auth: [self.configs[config_name][:login], self.configs[config_name][:password]],
             wsdl: self.configs[config_name][:directkit_wsdl]
         }
-        prms[:proxy] = self.configs[config_name] if self.configs[config_name][:proxy]
+        prms[:proxy] = self.configs[config_name][:proxy] if self.configs[config_name][:proxy]
         @clients[config_name] = Savon.client(prms)
       end
       @clients[config_name]
