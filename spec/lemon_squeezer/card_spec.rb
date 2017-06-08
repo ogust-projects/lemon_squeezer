@@ -85,7 +85,7 @@ module LemonSqueezer
         expect(card.debit).to be_a(BigDecimal)
         expect(card.credit).to be_a(BigDecimal)
         expect(card.commission).to be_a(BigDecimal)
-        expect(card.status).to be_a(Fixnum)
+        expect(card.status).to be_a(Integer)
         expect(card.error).to be_nil
       end
 
@@ -150,7 +150,7 @@ module LemonSqueezer
           expect(card_money_in.id).to be_a(String)
           expect(card_money_in.credit).to be_a(BigDecimal)
           expect(card_money_in.commission).to be_a(BigDecimal)
-          expect(card_money_in.status).to be_a(Fixnum)
+          expect(card_money_in.status).to be_a(Integer)
         else
           expect(card_money_in.id).to be_nil
           expect(card_money_in.credit).to be_nil
@@ -217,7 +217,7 @@ module LemonSqueezer
           expect(card_money_in_with_card_id.id).to be_a(String)
           expect(card_money_in_with_card_id.credit).to be_a(BigDecimal)
           expect(card_money_in_with_card_id.commission).to be_a(BigDecimal)
-          expect(card_money_in_with_card_id.status).to be_a(Fixnum)
+          expect(card_money_in_with_card_id.status).to be_a(Integer)
           expect(card_money_in_with_card_id.card_number).to be_a(String)
           expect(card_money_in_with_card_id.from_moneyin).to be_a(String)
         else

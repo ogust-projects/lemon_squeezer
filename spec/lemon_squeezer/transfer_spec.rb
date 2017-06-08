@@ -105,7 +105,7 @@ module LemonSqueezer
           expect(transfer.debit).to be_a(Float)
           expect(transfer.credit).to be_a(Float)
           expect(transfer.commission).to be_a(Float)
-          expect(transfer.status).to be_a(Fixnum)
+          expect(transfer.status).to be_a(Integer)
           expect(transfer.transfered_at).to be_a(DateTime)
         else
           expect(transfer.id).to be_nil
@@ -146,7 +146,7 @@ module LemonSqueezer
         expect(transfer_ext.debit).to be_a(Float)
         expect(transfer_ext.credit).to be_a(Float)
         expect(transfer_ext.commission).to be_a(Float)
-        expect(transfer_ext.status).to be_a(Fixnum)
+        expect(transfer_ext.status).to be_a(Integer)
         expect(transfer_ext.transfered_at).to be_a(DateTime)
         expect(transfer_ext.error).to be_nil
       end

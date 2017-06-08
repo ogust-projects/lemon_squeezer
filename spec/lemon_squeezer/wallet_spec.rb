@@ -89,7 +89,7 @@ module LemonSqueezer
         expect(main_wallet.name).to be_a(String)
         expect(main_wallet.email).to be_a(String)
         expect(main_wallet.iban).to be_a(Array)
-        expect(main_wallet.status).to be_a(Fixnum)
+        expect(main_wallet.status).to be_a(Integer)
         expect([true, false]).to include(main_wallet.blocked)
         expect(main_wallet.error).to be_nil
       end

@@ -9,15 +9,18 @@ module LemonSqueezer
     end
 
     def client(config_name)
-      prms = {
-          log: self.configs[config_name][:log],
-          env_namespace: :soapenv,
-          headers: {},
-          basic_auth: [self.configs[config_name][:login], self.configs[config_name][:password]],
-          wsdl: self.configs[config_name][:directkit_wsdl]
-      }
-      prms[:proxy] = self.configs[config_name] if self.configs[config_name][:proxy]
-      @clients[config_name] ||= Savon.client(prms)
+      unless @clients[config_name]
+        prms = {
+            log: self.configs[config_name][:log],
+            env_namespace: :soapenv,
+            headers: {},
+            basic_auth: [self.configs[config_name][:login], self.configs[config_name][:password]],
+            wsdl: self.configs[config_name][:directkit_wsdl]
+        }
+        prms[:proxy] = self.configs[config_name] if self.configs[config_name][:proxy]
+        @clients[config_name] = Savon.client(prms)
+      end
+      @clients[config_name]
     end
 
     def auth(config_name, public_ip)
