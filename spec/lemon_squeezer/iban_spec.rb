@@ -67,8 +67,8 @@ module LemonSqueezer
 
       it 'register an IBAN to RSpec wallet' do
         iban.register
-        expect(iban.id).to be_a(Fixnum)
-        expect(iban.status).to be_a(Fixnum)
+        expect(iban.id).to be_a(Integer)
+        expect(iban.status).to be_a(Integer)
         expect(iban.error).to be_nil
       end
 
