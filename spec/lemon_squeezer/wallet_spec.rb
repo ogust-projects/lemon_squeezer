@@ -16,6 +16,27 @@ module LemonSqueezer
                                         }
                                       )
     }
+    let(:register_wallet_company) {
+      LemonSqueezer::Wallet.new(
+                                  {
+                                    id: random_string,
+                                    email: random_email,
+                                    first_name: random_string,
+                                    last_name: random_string,
+                                    birthdate: random_date,
+                                    nationality: 'french',
+                                    country: 'france',
+                                    is_company: 1,
+                                    company_name: random_string,
+                                    company_website: 'https://example.com',
+                                    company_wescription: random_string,
+                                    payer_or_beneficiary: 2,
+                                    technical: 1,
+                                    config_name: :EUR,
+                                    public_ip: '46.101.130.8'
+                                  }
+                                )
+    }
     let(:register_wallet) {
       LemonSqueezer::Wallet.new(
                                   {
@@ -23,6 +44,11 @@ module LemonSqueezer
                                     email: random_email,
                                     first_name: random_string,
                                     last_name: random_string,
+                                    birthdate: random_date,
+                                    nationality: 'french',
+                                    country: 'francesss',
+                                    is_company: 0,
+                                    payer_or_beneficiary: 1,
                                     technical: 1,
                                     config_name: :EUR,
                                     public_ip: '46.101.130.8'
@@ -36,6 +62,11 @@ module LemonSqueezer
                                     email: 'society@lemonway.fr',
                                     first_name: random_string,
                                     last_name: random_string,
+                                    birthdate: random_date,
+                                    nationality: 'french',
+                                    country: 'france',
+                                    is_company: 0,
+                                    payer_or_beneficiary: 1,
                                     config_name: :EUR,
                                     public_ip: '46.101.130.8'
                                   }
@@ -48,6 +79,11 @@ module LemonSqueezer
                                         email: random_email,
                                         first_name: random_string,
                                         last_name: random_string,
+                                        birthdate: random_date,
+                                        nationality: 'french',
+                                        country: 'france',
+                                        is_company: 0,
+                                        payer_or_beneficiary: 1,
                                         config_name: :EUR,
                                         public_ip: '46.101.130.8'
                                       }
@@ -110,6 +146,10 @@ module LemonSqueezer
     describe '#register' do
       it 'returns a LemonSqueezer::Wallet object' do
         expect(register_wallet.register).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it 'returns a LemonSqueezer::Wallet object (company)' do
+        expect(register_wallet_company.register).to be_a(LemonSqueezer::Wallet)
       end
 
       it 'shortcut return a LemonSqueezer::Wallet object' do
