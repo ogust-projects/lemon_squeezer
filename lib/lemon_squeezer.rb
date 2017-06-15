@@ -50,6 +50,10 @@ module LemonSqueezer
     Wallet.new(params).get_details
   end
 
+  def self.wallet_update_details(params = {})
+    Wallet.new(params).update_details
+  end
+
   def self.wallet_register(params = {})
     Wallet.new(params).register
   end
