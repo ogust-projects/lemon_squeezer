@@ -1,30 +1,36 @@
 module LemonSqueezer
   class Wallet
-    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :email, :iban, :status, :blocked, :error,
-    :is_company, :company_name, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
+    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :iban, :status, :blocked, :error, :payer_or_beneficiary,
+    :is_company, :company_name, :company_website, :company_description, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
-    GET_DETAILS_PARAMS   = %i(wallet email)
-    REGISTER_PARAMS      = %i(wallet clientMail clientFirstName clientLastName)
-    UPDATE_STATUS_PARAMS = %i(wallet newStatus)
-    UPLOAD_FILE_PARAMS   = %i(wallet fileName type buffer)
+    GET_DETAILS_PARAMS      = %i(wallet email)
+    REGISTER_PARAMS         = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany nationality payerOrBeneficiary)
+    REGISTER_PARAMS_COMPANY = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany companyName companyWebsite companyDescription nationality payerOrBeneficiary)
+    UPDATE_STATUS_PARAMS    = %i(wallet newStatus)
+    UPLOAD_FILE_PARAMS      = %i(wallet fileName type buffer)
 
     FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'company_registration': 7 }
 
     def initialize(params = {})
-      @id                = params[:id]
-      @email             = params[:email]
-      @first_name        = params[:first_name]
-      @last_name         = params[:last_name]
-      @country           = params[:country]
-      @is_company        = params[:is_company]
-      @company_name      = params[:company_name]
-      @new_status        = params[:new_status]
-      @technical         = params[:technical]
-      @file_name         = params[:file_name]
-      @type              = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
-      @buffer            = params[:buffer]
-      @config_name       = params[:config_name] || :DEFAULT
-      @public_ip         = params[:public_ip]
+      @id                   = params[:id]
+      @email                = params[:email]
+      @first_name           = params[:first_name]
+      @last_name            = params[:last_name]
+      @birthdate            = params[:birthdate]
+      @nationality          = params[:nationality]
+      @payer_or_beneficiary = params[:payer_or_beneficiary]
+      @country              = params[:country]
+      @is_company           = params[:is_company]
+      @company_name         = params[:company_name]
+      @new_status           = params[:new_status]
+      @technical            = params[:technical]
+      @file_name            = params[:file_name]
+      @type                 = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
+      @buffer               = params[:buffer]
+      @config_name          = params[:config_name] || :DEFAULT
+      @public_ip            = params[:public_ip]
+      @company_website      = params[:company_website]
+      @company_description  = params[:company_description]
     end
 
     def get_details
@@ -48,7 +54,7 @@ module LemonSqueezer
     end
 
     def register
-      request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, self.public_ip, :register_wallet, :wallet)
+      request = Request.new((self.is_company == 1 ? REGISTER_PARAMS_COMPANY : REGISTER_PARAMS), register_params, register_message, self.config_name, self.public_ip, :register_wallet, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -112,7 +118,12 @@ module LemonSqueezer
       params.merge!(clientMail: email) if email
       params.merge!(clientFirstName: first_name) if first_name
       params.merge!(clientLastName: last_name) if last_name
+      params.merge!(birthdate: birthdate) if birthdate
+      params.merge!(nationality: nationality) if nationality
+      params.merge!(payerOrBeneficiary: payer_or_beneficiary) if payer_or_beneficiary
       params.merge!(isCompany: is_company) if is_company
+      params.merge!(companyWebsite: company_website) if company_website
+      params.merge!(companyDescription: company_description) if company_description
       params.merge!(ctry: country) if country
 
       params
