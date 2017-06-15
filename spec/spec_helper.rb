@@ -173,6 +173,10 @@ def random_string
   (0...6).map { o[rand(o.length)] }.join
 end
 
+def random_date from = (Date.today - 36500), to = Date.today
+    to - rand(to - from)
+end
+
 def random_email
   "#{random_string}@#{random_string}.com"
 end
