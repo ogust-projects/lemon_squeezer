@@ -160,6 +160,7 @@ module LemonSqueezer
         register_wallet.register
         expect(register_wallet.id).to be_a(String)
         expect(register_wallet.lwid).to be_a(String)
+        expect(register_wallet.payer_or_beneficiary).to eq(1)
         expect(register_wallet.error).to be_nil
       end
 
@@ -167,6 +168,7 @@ module LemonSqueezer
         register_wallet_company.register
         expect(register_wallet_company.id).to be_a(String)
         expect(register_wallet_company.lwid).to be_a(String)
+        expect(register_wallet_company.payer_or_beneficiary).to eq(2)
         expect(register_wallet_company.error).to be_nil
       end
 
