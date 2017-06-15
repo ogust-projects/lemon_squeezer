@@ -16,6 +16,19 @@ module LemonSqueezer
                                         }
                                       )
     }
+    let(:get_trans_history_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', start_date: Date.today - 5, end_date: Date.today, config_name: :EUR, public_ip: '46.101.130.8'}) }
+    let(:shortcut_wallet_get_trans_history) {
+      LemonSqueezer.wallet_get_trans_history(
+                                        {
+                                          id: 'sc',
+                                          email: 'society@lemonway.fr',
+                                          start_date: Date.today - 5,
+                                          end_date: Date.today,
+                                          config_name: :EUR,
+                                          public_ip: '46.101.130.8'
+                                        }
+                                      )
+    }
     let(:register_wallet_company) {
       LemonSqueezer::Wallet.new(
                                   {
@@ -280,6 +293,34 @@ module LemonSqueezer
         no_update_details_wallet.update_details
         expect(no_update_details_wallet.error).to be_a(Hash)
         expect(no_update_details_wallet.error[:code]).to eq -1
+      end
+    end
+
+    describe '#get_trans_history' do
+      it 'returns a LemonSqueezer::Wallet object' do
+        expect(get_trans_history_wallet.get_trans_history).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it 'shortcut return a LemonSqueezer::Wallet object' do
+        expect(shortcut_wallet_get_trans_history).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it 'get details of main wallet' do
+        get_trans_history_wallet.get_trans_history
+        expect(get_trans_history_wallet.hpay).to be_a(Array)
+        expect(get_trans_history_wallet.error).to be_nil
+      end
+
+      it 'return an error' do
+        invalid_wallet.get_trans_history
+        expect(invalid_wallet.error).to be_a(Hash)
+        expect(invalid_wallet.error[:code]).not_to eq -1
+      end
+
+      it 'return an error 250' do
+        no_wallet.get_trans_history
+        expect(no_wallet.error).to be_a(Hash)
+        expect(no_wallet.error[:code]).to eq -1
       end
     end
 
