@@ -1,6 +1,6 @@
 module LemonSqueezer
   class Wallet
-    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :iban, :status, :blocked, :error, :payer_or_beneficiary,
+    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
     :is_company, :company_name, :company_website, :company_description, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
     GET_DETAILS_PARAMS      = %i(wallet email)
@@ -13,6 +13,7 @@ module LemonSqueezer
 
     def initialize(params = {})
       @id                   = params[:id]
+      @lwid                 = params[:lwid]
       @email                = params[:email]
       @first_name           = params[:first_name]
       @last_name            = params[:last_name]
@@ -38,13 +39,24 @@ module LemonSqueezer
 
       Response.new(request).submit do |result, error|
         if result
-          self.id      = result[:id]
-          self.balance = result[:bal].to_f
-          self.name    = result[:name]
-          self.email   = result[:email]
-          self.iban    = []
-          self.status  = result[:status].to_i
-          self.blocked = result[:blocked] == '1'
+          self.id                   = result[:id]
+          self.balance              = result[:bal].to_f
+          self.name                 = result[:name]
+          self.email                = result[:email]
+          self.ibans                = result[:ibans]
+          self.documents            = result[:docs]
+          self.status               = result[:status].to_i
+          self.blocked              = result[:blocked] == '1'
+          self.first_name           = result[:first_name]
+          self.last_name            = result[:last_name]
+          self.birthdate            = result[:birthdate]
+          self.nationality          = result[:nationality]
+          self.payer_or_beneficiary = result[:payer_or_beneficiary]
+          self.country              = result[:country]
+          self.is_company           = result[:is_company]
+          self.company_name         = result[:company_name]
+          self.company_website      = result[:company_website]
+          self.company_description  = result[:company_description]
         end
 
         self.error = error
@@ -105,7 +117,7 @@ module LemonSqueezer
 
     def get_details_message
       message = get_details_params.merge!(
-                  version: '1.7'
+                  version: '2.0'
                 )
 
       message
@@ -132,11 +144,9 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
-                  version: '1.7'
+                  version: '2.0'
                 )
 
-      message.merge!(isCompany: is_company) if is_company
-      message.merge!(companyName: company_name) if company_name
       message.merge!(isOneTimeCustomer: technical) if technical
 
       message
@@ -153,7 +163,7 @@ module LemonSqueezer
 
     def update_status_message
       message = update_status_params.merge!(
-                  version: '1.0'
+                  version: '2.0'
                 )
 
       message
@@ -172,7 +182,7 @@ module LemonSqueezer
 
     def upload_file_message
       message = upload_file_params.merge!(
-                  version: '1.1'
+                  version: '2.0'
                 )
 
       message
