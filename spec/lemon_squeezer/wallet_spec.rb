@@ -166,6 +166,35 @@ module LemonSqueezer
         expect(main_wallet.error).to be_nil
       end
 
+      it 'get details of company wallet' do
+        register_wallet_company.register
+        
+        registered_wallet_company = LemonSqueezer::Wallet.new(
+                                  {
+                                    id: register_wallet_company.id,
+                                    email: register_wallet_company.email,
+                                    config_name: :EUR,
+                                    public_ip: '46.101.130.8'
+                                  }
+                                ).get_details
+
+        expect(registered_wallet_company.id).to be_a(String)
+        expect(registered_wallet_company.first_name).to eq(register_wallet_company.first_name.capitalize)
+        expect(registered_wallet_company.last_name).to eq(register_wallet_company.last_name.upcase)
+        #expect(registered_wallet_company.birthdate).to eq(register_wallet_company.birthdate.strftime("%d/%m/%Y"))
+        #expect(registered_wallet_company.nationality).to eq(register_wallet_company.nationality)
+        #expect(registered_wallet_company.country).to eq(register_wallet_company.country)
+        #expect(registered_wallet_company.is_company).to eq(register_wallet_company.is_company)
+        expect(registered_wallet_company.company_name).to eq(register_wallet_company.company_name.upcase)
+        #cause issue with lemonway api that mix website and company_description
+        #expect(registered_wallet_company.company_website).to eq(register_wallet_company.company_website)
+        #expect(registered_wallet_company.company_description).to eq(register_wallet_company.company_description)
+        expect(registered_wallet_company.payer_or_beneficiary).to eq(register_wallet_company.payer_or_beneficiary)
+        expect(registered_wallet_company.error).to be_nil
+        
+        
+      end
+
       it 'return an error' do
         invalid_wallet.get_details
         expect(invalid_wallet.error).to be_a(Hash)

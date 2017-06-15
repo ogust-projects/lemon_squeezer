@@ -52,7 +52,7 @@ module LemonSqueezer
           self.last_name            = result[:last_name]
           self.birthdate            = result[:birthdate]
           self.nationality          = result[:nationality]
-          self.payer_or_beneficiary = result[:payer_or_beneficiary]
+          self.payer_or_beneficiary = result[:payer_or_beneficiary].to_i
           self.country              = result[:country]
           self.is_company           = result[:is_company]
           self.company_name         = result[:company_name]
@@ -146,7 +146,7 @@ module LemonSqueezer
       params.merge!(clientMail: email) if email
       params.merge!(clientFirstName: first_name) if first_name
       params.merge!(clientLastName: last_name) if last_name
-      params.merge!(birthdate: birthdate) if birthdate
+      params.merge!(birthdate: birthdate.strftime("%d/%m/%Y")) if birthdate
       params.merge!(nationality: nationality) if nationality
       params.merge!(payerOrBeneficiary: payer_or_beneficiary) if payer_or_beneficiary
       params.merge!(isCompany: is_company) if is_company
@@ -175,7 +175,7 @@ module LemonSqueezer
       params.merge!(newMail: email) if email
       params.merge!(newFirstName: first_name) if first_name
       params.merge!(newLastName: last_name) if last_name
-      params.merge!(newBirthDate: birthdate) if birthdate
+      params.merge!(newBirthDate: birthdate.strftime("%d/%m/%Y")) if birthdate
       params.merge!(newNationality: nationality) if nationality
       params.merge!(newIsCompany: is_company) if is_company
       params.merge!(newCompanyName: company_name) if company_name
