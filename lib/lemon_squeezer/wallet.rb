@@ -9,7 +9,7 @@ module LemonSqueezer
     UPDATE_STATUS_PARAMS    = %i(wallet newStatus)
     UPLOAD_FILE_PARAMS      = %i(wallet fileName type buffer)
 
-    FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'company_registration': 7 }
+    FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'passport_europe': 3, 'passport_not_europe': 4, 'residence permit': 5, 'company_registration': 7, 'other_11': 11, 'other_12': 12, 'other_13': 13, 'other_14': 14, 'other_15': 15, 'other_16': 16, 'other_17': 17, 'other_18': 18, 'other_19': 19, 'other_20': 20 }
 
     def initialize(params = {})
       @id                   = params[:id]
