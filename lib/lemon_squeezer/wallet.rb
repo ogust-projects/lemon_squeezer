@@ -122,6 +122,7 @@ module LemonSqueezer
       params.merge!(nationality: nationality) if nationality
       params.merge!(payerOrBeneficiary: payer_or_beneficiary) if payer_or_beneficiary
       params.merge!(isCompany: is_company) if is_company
+      params.merge!(companyName: company_name) if company_name
       params.merge!(companyWebsite: company_website) if company_website
       params.merge!(companyDescription: company_description) if company_description
       params.merge!(ctry: country) if country
