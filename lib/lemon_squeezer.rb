@@ -54,6 +54,10 @@ module LemonSqueezer
     Wallet.new(params).update_details
   end
 
+  def self.wallet_get_trans_history(params = {})
+    Wallet.new(params).get_trans_history
+  end
+
   def self.wallet_register(params = {})
     Wallet.new(params).register
   end

@@ -1,14 +1,15 @@
 module LemonSqueezer
   class Wallet
     attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
-    :is_company, :company_name, :company_website, :company_description, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
+    :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
-    GET_DETAILS_PARAMS      = %i(wallet email)
-    UPDATE_DETAILS_PARAMS   = %i(wallet)
-    REGISTER_PARAMS         = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany nationality payerOrBeneficiary)
-    REGISTER_PARAMS_COMPANY = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany companyName companyWebsite companyDescription nationality payerOrBeneficiary)
-    UPDATE_STATUS_PARAMS    = %i(wallet newStatus)
-    UPLOAD_FILE_PARAMS      = %i(wallet fileName type buffer)
+    GET_DETAILS_PARAMS       = %i(wallet email)
+    GET_TRANS_HISTORY_PARAMS = %i(wallet)
+    UPDATE_DETAILS_PARAMS    = %i(wallet)
+    REGISTER_PARAMS          = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany nationality payerOrBeneficiary)
+    REGISTER_PARAMS_COMPANY  = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany companyName companyWebsite companyDescription nationality payerOrBeneficiary)
+    UPDATE_STATUS_PARAMS     = %i(wallet newStatus)
+    UPLOAD_FILE_PARAMS       = %i(wallet fileName type buffer)
 
     FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'passport_europe': 3, 'passport_not_europe': 4, 'residence permit': 5, 'company_registration': 7, 'other_11': 11, 'other_12': 12, 'other_13': 13, 'other_14': 14, 'other_15': 15, 'other_16': 16, 'other_17': 17, 'other_18': 18, 'other_19': 19, 'other_20': 20 }
 
@@ -25,6 +26,8 @@ module LemonSqueezer
       @is_company           = params[:is_company]
       @company_name         = params[:company_name]
       @new_status           = params[:new_status]
+      @start_date           = params[:start_date]
+      @end_date             = params[:end_date]
       @technical            = params[:technical]
       @file_name            = params[:file_name]
       @type                 = (FILE_TYPES[params[:type].to_sym].to_s rescue '')
@@ -96,6 +99,20 @@ module LemonSqueezer
       self
     end
 
+    def get_trans_history
+      request = Request.new(GET_TRANS_HISTORY_PARAMS, get_trans_history_params, get_trans_history_message, self.config_name, self.public_ip, :get_wallet_trans_history, :trans)
+
+      Response.new(request).submit do |result, error|
+        if result
+          self.hpay                 = result[:hpay]
+        end
+
+        self.error = error
+      end
+
+      self
+    end
+
     def update_status
       request = Request.new(UPDATE_STATUS_PARAMS, update_status_params, update_status_message, self.config_name, self.public_ip, :update_wallet_status, :wallet)
 
@@ -134,6 +151,24 @@ module LemonSqueezer
     def get_details_message
       message = get_details_params.merge!(
                   version: '2.0'
+                )
+
+      message
+    end
+
+    def get_trans_history_params
+      params = {}
+
+      params.merge!(wallet: id) if id
+      params.merge!(startDate: start_date.to_time.to_i) if start_date
+      params.merge!(endDate: end_date.to_time.to_i) if end_date
+
+      params
+    end
+
+    def get_trans_history_message
+      message = get_trans_history_params.merge!(
+                  version: '2.1'
                 )
 
       message
