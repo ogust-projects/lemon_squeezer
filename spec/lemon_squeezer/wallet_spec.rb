@@ -29,7 +29,7 @@ module LemonSqueezer
                                     is_company: 1,
                                     company_name: random_string,
                                     company_website: 'https://example.com',
-                                    company_wescription: random_string,
+                                    company_description: random_string,
                                     payer_or_beneficiary: 2,
                                     technical: 1,
                                     config_name: :EUR,
@@ -161,6 +161,13 @@ module LemonSqueezer
         expect(register_wallet.id).to be_a(String)
         expect(register_wallet.lwid).to be_a(String)
         expect(register_wallet.error).to be_nil
+      end
+
+      it 'get details of main wallet company' do
+        register_wallet_company.register
+        expect(register_wallet_company.id).to be_a(String)
+        expect(register_wallet_company.lwid).to be_a(String)
+        expect(register_wallet_company.error).to be_nil
       end
 
       it 'return an error' do
