@@ -4,6 +4,7 @@ module LemonSqueezer
     :is_company, :company_name, :company_website, :company_description, :new_status, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
     GET_DETAILS_PARAMS      = %i(wallet email)
+    UPDATE_DETAILS_PARAMS   = %i(wallet)
     REGISTER_PARAMS         = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany nationality payerOrBeneficiary)
     REGISTER_PARAMS_COMPANY = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany companyName companyWebsite companyDescription nationality payerOrBeneficiary)
     UPDATE_STATUS_PARAMS    = %i(wallet newStatus)
@@ -67,6 +68,21 @@ module LemonSqueezer
 
     def register
       request = Request.new((self.is_company == 1 ? REGISTER_PARAMS_COMPANY : REGISTER_PARAMS), register_params, register_message, self.config_name, self.public_ip, :register_wallet, :wallet)
+
+      Response.new(request).submit do |result, error|
+        if result
+          self.id   = result[:id]
+          self.lwid = result[:lwid]
+        end
+
+        self.error = error
+      end
+
+      self
+    end
+
+    def update_details
+      request = Request.new(UPDATE_DETAILS_PARAMS, update_details_params, update_details_message, self.config_name, self.public_ip, :update_wallet_details, :wallet)
 
       Response.new(request).submit do |result, error|
         if result
@@ -144,6 +160,34 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
+                  version: '2.0'
+                )
+
+      message.merge!(isOneTimeCustomer: technical) if technical
+
+      message
+    end
+
+    def update_details_params
+      params = {}
+
+      params.merge!(wallet: id) if id
+      params.merge!(newMail: email) if email
+      params.merge!(newFirstName: first_name) if first_name
+      params.merge!(newLastName: last_name) if last_name
+      params.merge!(newBirthDate: birthdate) if birthdate
+      params.merge!(newNationality: nationality) if nationality
+      params.merge!(newIsCompany: is_company) if is_company
+      params.merge!(newCompanyName: company_name) if company_name
+      params.merge!(newCompanyWebsite: company_website) if company_website
+      params.merge!(newCompanyDescription: company_description) if company_description
+      params.merge!(newCtry: country) if country
+
+      params
+    end
+
+    def update_details_message
+      message = update_details_params.merge!(
                   version: '2.0'
                 )
 
