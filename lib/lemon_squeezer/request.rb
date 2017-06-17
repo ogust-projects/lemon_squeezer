@@ -20,7 +20,7 @@ module LemonSqueezer
     def response
       response =  LemonSqueezer.configuration.client(self.config_name).call(
                     self.url,
-                    message: self.message
+                    message: {'p' => self.message}
                   )
 
       response.body["#{self.url}_response".to_sym]["#{self.result}_result".to_sym]
