@@ -200,8 +200,8 @@ module LemonSqueezer
         #expect(registered_wallet_company.is_company).to eq(register_wallet_company.is_company)
         expect(registered_wallet_company.company_name).to eq(register_wallet_company.company_name.upcase)
         #cause issue with lemonway api that mix website and company_description
-        #expect(registered_wallet_company.company_website).to eq(register_wallet_company.company_website)
-        #expect(registered_wallet_company.company_description).to eq(register_wallet_company.company_description)
+        expect(registered_wallet_company.company_website).to eq(register_wallet_company.company_website)
+        expect(registered_wallet_company.company_description).to eq(register_wallet_company.company_description)
         expect(registered_wallet_company.payer_or_beneficiary).to eq(register_wallet_company.payer_or_beneficiary)
         expect(registered_wallet_company.error).to be_nil
         

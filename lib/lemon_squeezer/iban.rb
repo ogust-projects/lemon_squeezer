@@ -60,7 +60,7 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
-                  version: '1.1'
+                  version: '2.1'
                 )
 
       message.merge!(comment: self.comment) if self.comment
