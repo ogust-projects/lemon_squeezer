@@ -132,7 +132,7 @@ module LemonSqueezer
 
     def fast_pay_message
       message = fast_pay_params.merge!(
-                  version: '1.2'
+                  version: '2.1'
                 )
 
       message.merge!(message: self.message) if self.message
@@ -155,7 +155,7 @@ module LemonSqueezer
 
     def money_in_message
       message = money_in_params.merge!(
-                  version: '1.1'
+                  version: '2.1'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
@@ -177,7 +177,7 @@ module LemonSqueezer
 
     def money_in_with_card_id_message
       message = money_in_with_card_id_params.merge!(
-                  version: '1.1'
+                  version: '2.1'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
@@ -200,7 +200,7 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
-                  version: '1.2'
+                  version: '2.1'
                 )
 
       message
