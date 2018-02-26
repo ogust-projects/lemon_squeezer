@@ -135,7 +135,7 @@ module LemonSqueezer
                   version: '2.1'
                 )
 
-      message.merge!(message: self.message) if self.message
+      message.merge!(comment: self.message) if self.message
 
       message
     end
@@ -181,7 +181,7 @@ module LemonSqueezer
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
-      message.merge!(message: self.message) if self.message
+      message.merge!(comment: self.message) if self.message
 
       message
     end
