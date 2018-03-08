@@ -29,10 +29,15 @@ module LemonSqueezer
 
   def get_details_params
     params = {}
-
     params[:wallet] = id if id
     params[:email] = email if email
-
     params
   end
+
+  def get_details_message
+    get_details_params.merge!(
+     version: '2.1'
+   )
+  end
+
 end
