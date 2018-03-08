@@ -46,6 +46,10 @@ module LemonSqueezer
     Iban.new(params).register
   end
 
+  def self.kyc_details(params = {})
+    Kyc.new(params).get_details
+  end
+
   def self.wallet_get_details(params = {})
     Wallet.new(params).get_details
   end
