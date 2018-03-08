@@ -24,4 +24,15 @@ module LemonSqueezer
       end
     end
   end
+
+  private
+
+  def get_details_params
+    params = {}
+
+    params[:wallet] = id if id
+    params[:email] = email if email
+
+    params
+  end
 end
