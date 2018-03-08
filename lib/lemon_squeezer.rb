@@ -9,6 +9,7 @@ require "lemon_squeezer/iban"
 require "lemon_squeezer/transfer"
 require "lemon_squeezer/wallet"
 require "lemon_squeezer/configuration"
+require "lemon_squeezer/kyc"
 
 begin
   require "pry"
