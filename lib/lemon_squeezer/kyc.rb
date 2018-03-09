@@ -1,5 +1,7 @@
 module LemonSqueezer
   class Kyc
+    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
+                  :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
     GET_DETAILS_PARAMS = %i[wallet email updateDate].freeze
     def initialize(params = {})
       @id                   = params[:id]
