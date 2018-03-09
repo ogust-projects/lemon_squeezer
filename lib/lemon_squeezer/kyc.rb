@@ -27,7 +27,6 @@ module LemonSqueezer
     end
   end
 
-  private
 
   def get_details_params
     params = {}
