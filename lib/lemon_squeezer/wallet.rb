@@ -129,6 +129,7 @@ module LemonSqueezer
       request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, self.config_name, self.public_ip, :upload_file, :upload)
 
       Response.new(request).submit do |result, error|
+        binding.pry
         self.document_id   = result[:id] if result
 
         self.error = error

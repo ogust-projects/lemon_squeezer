@@ -3,7 +3,6 @@ module LemonSqueezer
     attr_accessor :mandatory_params, :params, :message, :config_name, :url, :root, :result
 
     def initialize(mandatory_params, params, message, config_name, public_ip, url, root, result = nil)
-      
       @mandatory_params = mandatory_params
       @params           = params
       @config_name      = config_name
@@ -18,7 +17,7 @@ module LemonSqueezer
     end
 
     def response
-      response =  LemonSqueezer.configuration.client(self.config_name).call(
+      response = LemonSqueezer.configuration.client(self.config_name).call(
                     self.url,
                     message: {'p' => self.message}
                   )

@@ -48,7 +48,7 @@ module LemonSqueezer
   end
 
   def self.kyc_details(params = {})
-    Kyc.new(params).get_details
+    Kyc.new(params).details
   end
 
   def self.wallet_get_details(params = {})
