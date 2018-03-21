@@ -145,7 +145,7 @@ module LemonSqueezer
       LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'})
     }
     let(:file_to_upload) { Base64.encode64(File.open('./spec/fixtures/files/upload_test.pdf', 'rb').read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8', update_date: Date.new(2009,11,26).to_time.to_i }) }
     let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_upload_file) {
@@ -181,7 +181,7 @@ module LemonSqueezer
 
       it 'get details of company wallet' do
         register_wallet_company.register
-        
+
         registered_wallet_company = LemonSqueezer::Wallet.new(
                                   {
                                     id: register_wallet_company.id,
@@ -204,8 +204,8 @@ module LemonSqueezer
         expect(registered_wallet_company.company_description).to eq(register_wallet_company.company_description)
         expect(registered_wallet_company.payer_or_beneficiary).to eq(register_wallet_company.payer_or_beneficiary)
         expect(registered_wallet_company.error).to be_nil
-        
-        
+
+
       end
 
       it 'return an error' do
@@ -275,7 +275,7 @@ module LemonSqueezer
         expect(update_details_wallet.id).to be_a(String)
         expect(update_details_wallet.lwid).to be_a(String)
         expect(update_details_wallet.error).to be_nil
-        
+
         updated_details_wallet = LemonSqueezer::Wallet.new(
                                   {
                                     id: shortcut_wallet_register.id,
@@ -284,7 +284,7 @@ module LemonSqueezer
                                     public_ip: '46.101.130.8'
                                   }
                                 ).get_details
-                                
+
         expect(updated_details_wallet.first_name).to eq(update_details_wallet.first_name.capitalize)
         expect(updated_details_wallet.first_name).to_not eq(shortcut_wallet_register.first_name.capitalize)
       end
@@ -377,6 +377,13 @@ module LemonSqueezer
         no_upload_file_wallet.upload_file
         expect(no_upload_file_wallet.error).to be_a(Hash)
         expect(no_upload_file_wallet.error[:code]).to eq -1
+      end
+    end
+
+    describe '#kyc_details' do
+      it "should " do
+        upload_file_wallet.upload_file
+        upload_file_wallet.kyc_details
       end
     end
   end

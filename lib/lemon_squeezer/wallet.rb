@@ -1,7 +1,7 @@
 module LemonSqueezer
   class Wallet
     attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
-    :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
+    :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip, :update_date
 
     GET_DETAILS_PARAMS       = %i(wallet email)
     GET_TRANS_HISTORY_PARAMS = %i(wallet)
@@ -10,6 +10,7 @@ module LemonSqueezer
     REGISTER_PARAMS_COMPANY  = %i(wallet clientMail clientFirstName clientLastName ctry birthdate isCompany companyName companyWebsite companyDescription nationality payerOrBeneficiary)
     UPDATE_STATUS_PARAMS     = %i(wallet newStatus)
     UPLOAD_FILE_PARAMS       = %i(wallet fileName type buffer)
+    GET_KYC_DETAILS_PARAMS   = %i(wallet email updateDate)
 
     FILE_TYPES           = { 'id_card': 0, 'proof_address': 1, 'bank_information': 2, 'passport_europe': 3, 'passport_not_europe': 4, 'residence permit': 5, 'company_registration': 7, 'other_11': 11, 'other_12': 12, 'other_13': 13, 'other_14': 14, 'other_15': 15, 'other_16': 16, 'other_17': 17, 'other_18': 18, 'other_19': 19, 'other_20': 20 }
 
@@ -36,6 +37,7 @@ module LemonSqueezer
       @public_ip            = params[:public_ip]
       @company_website      = params[:company_website]
       @company_description  = params[:company_description]
+      @update_date          = params[:update_date]
     end
 
     def get_details
@@ -129,8 +131,18 @@ module LemonSqueezer
       request = Request.new(UPLOAD_FILE_PARAMS, upload_file_params, upload_file_message, self.config_name, self.public_ip, :upload_file, :upload)
 
       Response.new(request).submit do |result, error|
-        binding.pry
         self.document_id   = result[:id] if result
+
+        self.error = error
+      end
+
+      self
+    end
+
+    def kyc_details
+      request = Request.new(GET_KYC_DETAILS_PARAMS, get_kyc_details_params, get_details_message, self.config_name, self.public_ip, :get_kyc_status, :wallet)
+      Response.new(request).submit do |result, error|
+        binding.pry
 
         self.error = error
       end
@@ -144,6 +156,15 @@ module LemonSqueezer
       params = {}
 
       params.merge!(wallet: id) if id
+      params.merge!(email: email) if email
+
+      params
+      end
+    def get_kyc_details_params
+      params = {}
+
+      params.merge!(wallet: id) if id
+      params.merge!(updateDate: update_date) if update_date
       params.merge!(email: email) if email
 
       params

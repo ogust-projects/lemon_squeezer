@@ -9,7 +9,6 @@ require "lemon_squeezer/iban"
 require "lemon_squeezer/transfer"
 require "lemon_squeezer/wallet"
 require "lemon_squeezer/configuration"
-require "lemon_squeezer/kyc"
 
 begin
   require "pry"
@@ -48,7 +47,7 @@ module LemonSqueezer
   end
 
   def self.kyc_details(params = {})
-    Kyc.new(params).details
+    Wallet.new(params).kyc_details
   end
 
   def self.wallet_get_details(params = {})
