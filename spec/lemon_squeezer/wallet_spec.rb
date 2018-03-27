@@ -145,12 +145,19 @@ module LemonSqueezer
       LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'})
     }
     let(:file_to_upload) { Base64.encode64(File.open('./spec/fixtures/files/upload_test.pdf', 'rb').read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8', update_date: Date.new(2009,11,26).to_time.to_i }) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({email: 'test@test.fr', id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8', update_date: Date.today - 30 }) }
     let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
     let(:shortcut_wallet_upload_file) {
       LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' })
     }
+
+    let(:kyc) do
+      LemonSqueezer::Wallet.new(id: register_wallet.id,
+                                email: register_wallet.email,
+                                config_name: :EUR, public_ip: '46.101.130.8',
+                                update_date: Date.today - 10)
+    end
 
     describe ':DEFAULT' do
       it 'returns a LemonSqueezer::Wallet object' do
@@ -382,8 +389,7 @@ module LemonSqueezer
 
     describe '#kyc_details' do
       it "should " do
-        upload_file_wallet.upload_file
-        upload_file_wallet.kyc_details
+        kyc.kyc_details
       end
     end
   end
