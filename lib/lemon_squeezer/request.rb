@@ -17,12 +17,12 @@ module LemonSqueezer
     end
 
     def response
-      response = LemonSqueezer.configuration.client(self.config_name).call(
-                    self.url,
-                    message: {'p' => self.message}
-                  )
+      response = LemonSqueezer.configuration.client(config_name).call(
+        url,
+        message: { p: message }
+      )
 
-      response.body["#{self.url}_response".to_sym]["#{self.result}_result".to_sym]
+      response.body["#{url}_response".to_sym]["#{result}_result".to_sym]
     end
 
   end

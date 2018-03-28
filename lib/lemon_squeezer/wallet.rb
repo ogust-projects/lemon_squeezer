@@ -1,7 +1,7 @@
 module LemonSqueezer
   class Wallet
-    attr_accessor :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
-    :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip, :update_date
+    attr_accessor  :update_date, :kyc, :id, :lwid, :balance, :name, :first_name, :last_name, :birthdate, :nationality, :email, :ibans, :documents, :status, :blocked, :error, :payer_or_beneficiary,
+    :is_company, :company_name, :company_website, :company_description, :new_status, :start_date, :end_date, :hpay, :technical, :file_name, :type, :buffer, :country, :document_id, :config_name, :public_ip
 
     GET_DETAILS_PARAMS       = %i(wallet email)
     GET_TRANS_HISTORY_PARAMS = %i(wallet)
@@ -138,9 +138,9 @@ module LemonSqueezer
     end
 
     def kyc_details
-      request = Request.new(GET_KYC_DETAILS_PARAMS, get_kyc_details_params, get_details_message, self.config_name, self.public_ip, :get_kyc_status, :wallet)
+      request = Request.new(GET_KYC_DETAILS_PARAMS, get_kyc_details_params, get_kyc_details_message, self.config_name, self.public_ip, :get_kyc_status, :wallets)
       Response.new(request).submit do |result, error|
-        binding.pry
+        self.kyc = result[:wallet] if result
 
         self.error = error
       end
@@ -161,12 +161,17 @@ module LemonSqueezer
 
     def get_kyc_details_params
       params = {}
-
-      #params.merge!(wallet: id) if id
-      #params.merge!(email: email) if email
-      params.merge!(updateDate: update_date.to_time.to_i.to_s ) if update_date
+      params.merge!(updateDate: update_date.to_time.to_i ) if update_date
 
       params
+    end
+
+    def get_kyc_details_message
+       message = get_kyc_details_params.merge!(
+                  version: '2.1'
+                )
+
+      message
     end
 
     def get_details_message

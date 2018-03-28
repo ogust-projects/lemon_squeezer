@@ -153,10 +153,9 @@ module LemonSqueezer
     }
 
     let(:kyc) do
-      LemonSqueezer::Wallet.new(id: register_wallet.id,
-                                email: register_wallet.email,
-                                config_name: :EUR, public_ip: '46.101.130.8',
-                                update_date: Date.today - 10)
+      LemonSqueezer::Wallet.new(config_name: :EUR,
+                                public_ip: '46.101.130.8',
+                                update_date: Date.today - 1)
     end
 
     describe ':DEFAULT' do
@@ -388,8 +387,8 @@ module LemonSqueezer
     end
 
     describe '#kyc_details' do
-      it "should " do
-        kyc.kyc_details
+      it 'returns a LemonSqueezer::Wallet object' do
+        expect(kyc).to be_a(LemonSqueezer::Wallet)
       end
     end
   end
