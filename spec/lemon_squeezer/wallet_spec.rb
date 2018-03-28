@@ -2,160 +2,146 @@ require 'spec_helper'
 
 module LemonSqueezer
   describe Wallet do
-    let(:main_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', config_name: :EUR, public_ip: '46.101.130.8'}) }
-    let(:default_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr'}) }
-    let(:invalid_wallet) { LemonSqueezer::Wallet.new({id: 'erratum', email: 'erratum@erratum.com', config_name: :EUR, public_ip: '46.101.130.8'}) }
+    let(:main_wallet) { LemonSqueezer::Wallet.new(id: 'sc', email: 'society@lemonway.fr', config_name: :EUR, public_ip: '46.101.130.8') }
+    let(:default_wallet) { LemonSqueezer::Wallet.new(id: 'sc', email: 'society@lemonway.fr') }
+    let(:invalid_wallet) { LemonSqueezer::Wallet.new(id: 'erratum', email: 'erratum@erratum.com', config_name: :EUR, public_ip: '46.101.130.8') }
     let(:no_wallet) { LemonSqueezer::Wallet.new }
-    let(:shortcut_wallet_get_details) {
+    let(:shortcut_wallet_get_details) do
       LemonSqueezer.wallet_get_details(
-                                        {
-                                          id: 'sc',
-                                          email: 'society@lemonway.fr',
-                                          config_name: :EUR,
-                                          public_ip: '46.101.130.8'
-                                        }
-                                      )
-    }
-    let(:get_trans_history_wallet) { LemonSqueezer::Wallet.new({id: 'sc', email: 'society@lemonway.fr', start_date: Date.today - 5, end_date: Date.today, config_name: :EUR, public_ip: '46.101.130.8'}) }
-    let(:shortcut_wallet_get_trans_history) {
+        id: 'sc',
+        email: 'society@lemonway.fr',
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:get_trans_history_wallet) { LemonSqueezer::Wallet.new(id: 'sc', email: 'society@lemonway.fr', start_date: Date.today - 5, end_date: Date.today, config_name: :EUR, public_ip: '46.101.130.8') }
+    let(:shortcut_wallet_get_trans_history) do
       LemonSqueezer.wallet_get_trans_history(
-                                        {
-                                          id: 'sc',
-                                          email: 'society@lemonway.fr',
-                                          start_date: Date.today - 5,
-                                          end_date: Date.today,
-                                          config_name: :EUR,
-                                          public_ip: '46.101.130.8'
-                                        }
-                                      )
-    }
-    let(:register_wallet_company) {
+        id: 'sc',
+        email: 'society@lemonway.fr',
+        start_date: Date.today - 5,
+        end_date: Date.today,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:register_wallet_company) do
       LemonSqueezer::Wallet.new(
-                                  {
-                                    id: random_string,
-                                    email: random_email,
-                                    first_name: random_string,
-                                    last_name: random_string,
-                                    birthdate: random_date,
-                                    nationality: 'FRA',
-                                    country: 'FRA',
-                                    is_company: 1,
-                                    company_name: random_string,
-                                    company_website: 'https://example.com',
-                                    company_description: random_string,
-                                    payer_or_beneficiary: 2,
-                                    technical: 1,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                )
-    }
-    let(:register_wallet) {
+        id: random_string,
+        email: random_email,
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 1,
+        company_name: random_string,
+        company_website: 'https://example.com',
+        company_description: random_string,
+        payer_or_beneficiary: 2,
+        technical: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:register_wallet) do
       LemonSqueezer::Wallet.new(
-                                  {
-                                    id: random_string,
-                                    email: random_email,
-                                    first_name: random_string,
-                                    last_name: random_string,
-                                    birthdate: random_date,
-                                    nationality: 'FRA',
-                                    country: 'FRA',
-                                    is_company: 0,
-                                    payer_or_beneficiary: 1,
-                                    technical: 1,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                )
-    }
-    let(:register_existing_wallet) {
+        id: random_string,
+        email: random_email,
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 0,
+        payer_or_beneficiary: 1,
+        technical: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:register_existing_wallet) do
       LemonSqueezer::Wallet.new(
-                                  {
-                                    id: 'sc',
-                                    email: 'society@lemonway.fr',
-                                    first_name: random_string,
-                                    last_name: random_string,
-                                    birthdate: random_date,
-                                    nationality: 'FRA',
-                                    country: 'FRA',
-                                    is_company: 0,
-                                    payer_or_beneficiary: 1,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                )
-    }
-    let(:shortcut_wallet_register) {
+        id: 'sc',
+        email: 'society@lemonway.fr',
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 0,
+        payer_or_beneficiary: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:shortcut_wallet_register) do
       LemonSqueezer.wallet_register(
-                                      {
-                                        id: random_string,
-                                        email: random_email,
-                                        first_name: random_string,
-                                        last_name: random_string,
-                                        birthdate: random_date,
-                                        nationality: 'FRA',
-                                        country: 'FRA',
-                                        is_company: 0,
-                                        payer_or_beneficiary: 1,
-                                        config_name: :EUR,
-                                        public_ip: '46.101.130.8'
-                                      }
-                                    )
-    }
-    let(:update_details_wallet) {
+        id: random_string,
+        email: random_email,
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 0,
+        payer_or_beneficiary: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:update_details_wallet) do
       LemonSqueezer::Wallet.new(
-                                  {
-                                    id: shortcut_wallet_register.id,
-                                    email: shortcut_wallet_register.email,
-                                    first_name: random_string,
-                                    last_name: random_string,
-                                    birthdate: random_date,
-                                    nationality: 'FRA',
-                                    country: 'FRA',
-                                    is_company: 0,
-                                    payer_or_beneficiary: 1,
-                                    technical: 1,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                )
-    }
-    let(:shortcut_wallet_update_details) {
+        id: shortcut_wallet_register.id,
+        email: shortcut_wallet_register.email,
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 0,
+        payer_or_beneficiary: 1,
+        technical: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
+    let(:shortcut_wallet_update_details) do
       LemonSqueezer.wallet_update_details(
-                                      {
-                                        id: shortcut_wallet_register.id,
-                                        email: shortcut_wallet_register.email,
-                                        first_name: random_string,
-                                        last_name: random_string,
-                                        birthdate: random_date,
-                                        nationality: 'FRA' ,
-                                        country: 'FRA',
-                                        is_company: 0,
-                                        payer_or_beneficiary: 1,
-                                        config_name: :EUR,
-                                        public_ip: '46.101.130.8'
-                                      }
-                                    )
-    }
+        id: shortcut_wallet_register.id,
+        email: shortcut_wallet_register.email,
+        first_name: random_string,
+        last_name: random_string,
+        birthdate: random_date,
+        nationality: 'FRA',
+        country: 'FRA',
+        is_company: 0,
+        payer_or_beneficiary: 1,
+        config_name: :EUR,
+        public_ip: '46.101.130.8'
+      )
+    end
     let(:no_update_details_wallet) { LemonSqueezer::Wallet.new }
-    let(:update_status_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'}) }
-    let(:invalid_update_status_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, new_status: 404, config_name: :EUR, public_ip: '46.101.130.8'}) }
+    let(:update_status_wallet) { LemonSqueezer::Wallet.new(id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8') }
+    let(:invalid_update_status_wallet) { LemonSqueezer::Wallet.new(id: register_wallet.register.id, new_status: 404, config_name: :EUR, public_ip: '46.101.130.8') }
     let(:no_update_status_wallet) { LemonSqueezer::Wallet.new }
-    let(:shortcut_wallet_update_status) {
-      LemonSqueezer.wallet_update_status({id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8'})
-    }
+    let(:shortcut_wallet_update_status) do
+      LemonSqueezer.wallet_update_status(id: register_wallet.register.id, new_status: 12, config_name: :EUR, public_ip: '46.101.130.8')
+    end
     let(:file_to_upload) { Base64.encode64(File.open('./spec/fixtures/files/upload_test.pdf', 'rb').read) }
-    let(:upload_file_wallet) { LemonSqueezer::Wallet.new({email: 'test@test.fr', id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8', update_date: Date.today - 30 }) }
-    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' }) }
+    let(:upload_file_wallet) { LemonSqueezer::Wallet.new(email: 'test@test.fr', id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8', update_date: Date.today - 30) }
+    let(:invalid_upload_file_wallet) { LemonSqueezer::Wallet.new(id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'toto', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8') }
     let(:no_upload_file_wallet) { LemonSqueezer::Wallet.new }
-    let(:shortcut_wallet_upload_file) {
-      LemonSqueezer.wallet_upload_file({id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8' })
-    }
+    let(:shortcut_wallet_upload_file) do
+      LemonSqueezer.wallet_upload_file(id: register_wallet.register.id, file_name: 'upload_test.pdf', type: 'id_card', buffer: file_to_upload, config_name: :EUR, public_ip: '46.101.130.8')
+    end
 
     let(:kyc) do
-      LemonSqueezer::Wallet.new(config_name: :EUR,
-                                public_ip: '46.101.130.8',
-                                update_date: Date.today - 1)
+      LemonSqueezer::Wallet.new(
+        config_name: :EUR,
+        public_ip: '46.101.130.8',
+        update_date: Date.today - 1
+      )
     end
 
     describe ':DEFAULT' do
@@ -189,29 +175,25 @@ module LemonSqueezer
         register_wallet_company.register
 
         registered_wallet_company = LemonSqueezer::Wallet.new(
-                                  {
-                                    id: register_wallet_company.id,
-                                    email: register_wallet_company.email,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                ).get_details
+          id: register_wallet_company.id,
+          email: register_wallet_company.email,
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
+        ).get_details
 
         expect(registered_wallet_company.id).to be_a(String)
         expect(registered_wallet_company.first_name).to eq(register_wallet_company.first_name.capitalize)
         expect(registered_wallet_company.last_name).to eq(register_wallet_company.last_name.upcase)
-        #expect(registered_wallet_company.birthdate).to eq(register_wallet_company.birthdate.strftime("%d/%m/%Y"))
-        #expect(registered_wallet_company.nationality).to eq(register_wallet_company.nationality)
-        #expect(registered_wallet_company.country).to eq(register_wallet_company.country)
-        #expect(registered_wallet_company.is_company).to eq(register_wallet_company.is_company)
+        # expect(registered_wallet_company.birthdate).to eq(register_wallet_company.birthdate.strftime("%d/%m/%Y"))
+        # expect(registered_wallet_company.nationality).to eq(register_wallet_company.nationality)
+        # expect(registered_wallet_company.country).to eq(register_wallet_company.country)
+        # expect(registered_wallet_company.is_company).to eq(register_wallet_company.is_company)
         expect(registered_wallet_company.company_name).to eq(register_wallet_company.company_name.upcase)
-        #cause issue with lemonway api that mix website and company_description
+        # cause issue with lemonway api that mix website and company_description
         expect(registered_wallet_company.company_website).to eq(register_wallet_company.company_website)
         expect(registered_wallet_company.company_description).to eq(register_wallet_company.company_description)
         expect(registered_wallet_company.payer_or_beneficiary).to eq(register_wallet_company.payer_or_beneficiary)
         expect(registered_wallet_company.error).to be_nil
-
-
       end
 
       it 'return an error' do
@@ -283,13 +265,11 @@ module LemonSqueezer
         expect(update_details_wallet.error).to be_nil
 
         updated_details_wallet = LemonSqueezer::Wallet.new(
-                                  {
-                                    id: shortcut_wallet_register.id,
-                                    email: shortcut_wallet_register.email,
-                                    config_name: :EUR,
-                                    public_ip: '46.101.130.8'
-                                  }
-                                ).get_details
+          id: shortcut_wallet_register.id,
+          email: shortcut_wallet_register.email,
+          config_name: :EUR,
+          public_ip: '46.101.130.8'
+        ).get_details
 
         expect(updated_details_wallet.first_name).to eq(update_details_wallet.first_name.capitalize)
         expect(updated_details_wallet.first_name).to_not eq(shortcut_wallet_register.first_name.capitalize)
@@ -389,6 +369,10 @@ module LemonSqueezer
     describe '#kyc_details' do
       it 'returns a LemonSqueezer::Wallet object' do
         expect(kyc).to be_a(LemonSqueezer::Wallet)
+      end
+
+      it 'should return a Json Object' do
+        expect(kyc.kyc_details.kyc).to be_a(Array)
       end
     end
   end

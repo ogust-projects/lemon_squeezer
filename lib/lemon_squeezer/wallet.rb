@@ -141,7 +141,6 @@ module LemonSqueezer
       request = Request.new(GET_KYC_DETAILS_PARAMS, get_kyc_details_params, get_kyc_details_message, self.config_name, self.public_ip, :get_kyc_status, :wallets)
       Response.new(request).submit do |result, error|
         self.kyc = result[:wallet] if result
-
         self.error = error
       end
 
