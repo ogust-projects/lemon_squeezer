@@ -34,6 +34,10 @@ module LemonSqueezer
     Card.new(params).money_in_with_card_id
   end
 
+  def self.card_money_in_web_init(params = {})
+    Card.new(params).money_in_web_init
+  end
+
   def self.card_money_in(params = {})
     Card.new(params).money_in
   end
