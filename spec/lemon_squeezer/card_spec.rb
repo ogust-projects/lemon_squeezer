@@ -244,6 +244,79 @@ module LemonSqueezer
       end
     end
 
+    let(:card_money_in_web_init) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: 'rspecwallet',
+          amount: 234.56,
+          auto_commission: 0,
+          config_name: :EUR,
+          public_ip: '46.101.130.8',
+          wk_token: '1245',
+          return_url: 'https://localhost/return_url',
+          error_url: 'https://localhost/error_url',
+          cancel_url: 'https://localhost/cancel_url',
+          register_card: 1,
+          is_pre_auth: 1
+        }
+      )
+    }
+    let(:invalid_card_money_in_web_init) {
+      LemonSqueezer::Card.new(
+        {
+          receiver: 'rspecwallet',
+          amount: 234.56,
+          auto_commission: 0,
+          config_name: :EUR,
+          public_ip: '46.101.130.8',
+          wk_token: '1245',
+          error_url: 'https://localhost/error_url',
+          cancel_url: 'https://localhost/cancel_url',
+          register_card: 1,
+          is_pre_auth: 1
+        }
+      )
+    }
+    let(:no_card_money_in_web_init) { LemonSqueezer::Card.new }
+    let(:shortcut_money_in_web_init) { LemonSqueezer.card_money_in_web_init }
+
+    describe '#money_in_web_init' do
+      it 'returns a LemonSqueezer::Card object' do
+        expect(card_money_in_web_init.money_in_web_init).to be_a(LemonSqueezer::Card)
+      end
+
+      it 'shortcut return a LemonSqueezer::Card object' do
+        expect(shortcut_money_in_web_init).to be_a(LemonSqueezer::Card)
+      end
+
+      it 'pay with a registred card to rspecwallet wallet' do
+        card_money_in_web_init.money_in_web_init
+
+        if card_money_in_web_init.error.blank?
+          expect(card_money_in_web_init.id).to be_a(String)
+          expect(card_money_in_web_init.card_id).to be_a(String)
+          expect(card_money_in_web_init.token).to be_a(String)
+        else
+          expect(card_money_in_web_init.id).to be_nil
+          expect(card_money_in_web_init.card_id).to be_nil
+          expect(card_money_in_web_init.token).to be_nil
+        end
+        expect(card_money_in_web_init.receiver).to be_a(String)
+      end
+
+      it 'return an error' do
+        invalid_card_money_in_web_init.money_in_web_init
+        expect(invalid_card_money_in_web_init.error).to be_a(Hash)
+        expect(invalid_card_money_in_web_init.error[:code]).to eq -1
+      end
+
+      it 'return error 250' do
+        no_card_money_in_web_init.money_in_web_init
+        expect(no_card_money_in_web_init.error).to be_a(Hash)
+        expect(no_card_money_in_web_init.error[:code]).to eq -1
+      end
+    end
+
     let(:card_registered) {
       LemonSqueezer::Card.new(
         {
