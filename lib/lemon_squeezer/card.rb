@@ -1,8 +1,8 @@
 module LemonSqueezer
   class Card
-    attr_accessor :id, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount,
+    attr_accessor :id, :token, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount,
                   :card_type, :card_number, :card_crypto, :card_date, :message, :auto_commission, :register_card, :debit,
-                  :credit, :commission, :status, :error, :config_name, :public_ip
+                  :credit, :commission, :status, :error, :config_name, :public_ip, :wk_token, :return_url, :error_url, :cancel_url, :is_pre_auth
 
     TYPES = %i(cb visa mastercard)
 
@@ -15,6 +15,7 @@ module LemonSqueezer
     FAST_PAY_PARAMS              = %i(clientMail clientFirstName clientLastName cardType cardNumber cardCrypto cardDate creditWallet amount autoCommission registerCard)
     MONEY_IN_PARAMS              = %i(wallet cardType cardNumber cardCrypto cardDate amountTot)
     MONEY_IN_WITH_CARD_ID_PARAMS = %i(wallet cardId amountTot autoCommission)
+    MONEY_IN_WEB_INIT_PARAMS     = %i(wallet amountTot autoCommission wkToken returnUrl errorUrl cancelUrl registerCard isPreAuth)
     REGISTER_PARAMS              = %i(wallet cardType cardNumber cardCode cardDate)
 
     def initialize(params = {})
@@ -33,6 +34,12 @@ module LemonSqueezer
       @register_card     = params[:register_card]
       @config_name       = params[:config_name] || :DEFAULT
       @public_ip         = params[:public_ip]
+      
+      @wk_token           = params[:wk_token]
+      @return_url         = params[:return_url]
+      @error_url          = params[:error_url]
+      @cancel_url         = params[:cancel_url]
+      @is_pre_auth         = params[:is_pre_auth]
     end
 
     def card_type_label
@@ -95,6 +102,22 @@ module LemonSqueezer
 
       self
     end
+
+    def money_in_web_init
+      request = Request.new(MONEY_IN_WEB_INIT_PARAMS, money_in_web_init_params, money_in_web_init_message, self.config_name, self.public_ip, :money_in_web_init, :moneyinweb)
+      Response.new(request).submit do |result, error|
+        if result
+          self.id = result[:id]
+          self.card_id = result[:card][:id] if result[:card]
+          self.token = result[:token]
+        end
+
+        self.error = error
+      end
+
+      self
+    end
+    
 
     def register
       request = Request.new(REGISTER_PARAMS, register_params, register_message, self.config_name, self.public_ip, :register_card, :card)
@@ -177,6 +200,37 @@ module LemonSqueezer
 
     def money_in_with_card_id_message
       message = money_in_with_card_id_params.merge!(
+                  version: '2.1'
+                )
+
+      message.merge!(amountCom: self.commission) if self.commission
+      message.merge!(comment: self.message) if self.message
+
+      message
+    end
+
+    def money_in_web_init_params
+      
+      
+      
+      params = {}
+
+      params.merge!(wallet: self.receiver) if self.receiver
+      params.merge!(amountTot: self.amount) if self.amount
+      params.merge!(autoCommission: self.auto_commission) if self.auto_commission
+      params.merge!(wkToken: self.wk_token) if self.wk_token
+      params.merge!(returnUrl: self.return_url) if self.return_url
+      params.merge!(errorUrl: self.error_url) if self.error_url
+      params.merge!(cancelUrl: self.cancel_url) if self.cancel_url
+      params.merge!(registerCard: self.register_card) if self.register_card
+      params.merge!(isPreAuth: self.is_pre_auth) if self.is_pre_auth
+      
+
+      params
+    end
+
+    def money_in_web_init_message
+      message = money_in_web_init_params.merge!(
                   version: '2.1'
                 )
 
