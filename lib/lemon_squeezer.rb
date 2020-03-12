@@ -38,6 +38,10 @@ module LemonSqueezer
     Card.new(params).money_in_web_init
   end
 
+  def self.card_get_money_in_trans_details(params = {})
+    Card.new(params).get_money_in_trans_details
+  end
+
   def self.card_money_in(params = {})
     Card.new(params).money_in
   end

@@ -71,7 +71,7 @@ module LemonSqueezer
 
     def send_payment_message
       message = send_payment_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(message: self.message) if self.message
@@ -93,7 +93,7 @@ module LemonSqueezer
 
     def money_out_message
       message = money_out_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
