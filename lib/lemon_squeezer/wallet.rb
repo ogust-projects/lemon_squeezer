@@ -150,7 +150,7 @@ module LemonSqueezer
 
     def get_details_message
       message = get_details_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message
@@ -168,7 +168,7 @@ module LemonSqueezer
 
     def get_trans_history_message
       message = get_trans_history_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message
@@ -195,7 +195,7 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(isOneTimeCustomer: technical) if technical
@@ -223,7 +223,7 @@ module LemonSqueezer
 
     def update_details_message
       message = update_details_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(isOneTimeCustomer: technical) if technical
@@ -242,7 +242,7 @@ module LemonSqueezer
 
     def update_status_message
       message = update_status_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message
@@ -261,7 +261,7 @@ module LemonSqueezer
 
     def upload_file_message
       message = upload_file_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message

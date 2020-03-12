@@ -1,8 +1,9 @@
 module LemonSqueezer
   class Card
-    attr_accessor :id, :token, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount,
+    attr_accessor :id, :token, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount, :hpay,
                   :card_type, :card_number, :card_crypto, :card_date, :message, :auto_commission, :register_card, :debit,
-                  :credit, :commission, :status, :error, :config_name, :public_ip, :wk_token, :return_url, :error_url, :cancel_url, :is_pre_auth
+                  :credit, :commission, :status, :error, :config_name, :public_ip, :wk_token, :return_url, :error_url, :cancel_url, :is_pre_auth,
+                  :transaction_id, :transaction_comment, :transaction_merchant_token, :start_date, :end_date
 
     TYPES = %i(cb visa mastercard)
 
@@ -16,6 +17,7 @@ module LemonSqueezer
     MONEY_IN_PARAMS              = %i(wallet cardType cardNumber cardCrypto cardDate amountTot)
     MONEY_IN_WITH_CARD_ID_PARAMS = %i(wallet cardId amountTot autoCommission)
     MONEY_IN_WEB_INIT_PARAMS     = %i(wallet amountTot autoCommission wkToken returnUrl errorUrl cancelUrl registerCard isPreAuth)
+    GET_MONEY_IN_TRANS_DETAILS_PARAMS     = %i()
     REGISTER_PARAMS              = %i(wallet cardType cardNumber cardCode cardDate)
 
     def initialize(params = {})
@@ -39,7 +41,13 @@ module LemonSqueezer
       @return_url         = params[:return_url]
       @error_url          = params[:error_url]
       @cancel_url         = params[:cancel_url]
-      @is_pre_auth         = params[:is_pre_auth]
+      @is_pre_auth        = params[:is_pre_auth]
+      
+      @transaction_id     = params[:transaction_id]
+      @transaction_comment     = params[:transaction_comment]
+      @transaction_merchant_token     = params[:transaction_merchant_token]
+      @start_date         = params[:start_date]
+      @end_date           = params[:end_date]
     end
 
     def card_type_label
@@ -117,6 +125,19 @@ module LemonSqueezer
 
       self
     end
+
+    def get_money_in_trans_details
+      request = Request.new(GET_MONEY_IN_TRANS_DETAILS_PARAMS, get_money_in_trans_details_params, get_money_in_trans_details_message, self.config_name, self.public_ip, :get_money_in_trans_details, :trans)
+      Response.new(request).submit do |result, error|
+        if result
+          self.hpay                 = result[:hpay]
+        end
+
+        self.error = error
+      end
+
+      self
+    end
     
 
     def register
@@ -155,7 +176,7 @@ module LemonSqueezer
 
     def fast_pay_message
       message = fast_pay_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(comment: self.message) if self.message
@@ -178,7 +199,7 @@ module LemonSqueezer
 
     def money_in_message
       message = money_in_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
@@ -200,7 +221,7 @@ module LemonSqueezer
 
     def money_in_with_card_id_message
       message = money_in_with_card_id_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
@@ -231,11 +252,35 @@ module LemonSqueezer
 
     def money_in_web_init_message
       message = money_in_web_init_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message.merge!(amountCom: self.commission) if self.commission
       message.merge!(comment: self.message) if self.message
+
+      message
+    end
+
+    def get_money_in_trans_details_params
+      
+      
+      
+      params = {}
+      
+      params.merge!(transactionId: self.transaction_id) if self.transaction_id
+      params.merge!(transactionComment: self.transaction_comment) if self.transaction_comment
+      params.merge!(transactionMerchantToken: self.transaction_merchant_token) if self.transaction_merchant_token
+      params.merge!(startDate: self.start_date) if self.start_date
+      params.merge!(endDate: self.end_date) if self.end_date
+      
+
+      params
+    end
+
+    def get_money_in_trans_details_message
+      message = get_money_in_trans_details_params.merge!(
+                  version: '2.5'
+                )
 
       message
     end
@@ -254,7 +299,7 @@ module LemonSqueezer
 
     def register_message
       message = register_params.merge!(
-                  version: '2.1'
+                  version: '2.5'
                 )
 
       message

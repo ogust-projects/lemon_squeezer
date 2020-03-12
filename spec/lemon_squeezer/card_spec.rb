@@ -6,8 +6,8 @@ module LemonSqueezer
       LemonSqueezer::Card.new(
         {
           sender: random_email,
-          sender_first_name: random_string,
-          sender_last_name: random_string,
+          sender_first_name: 'Marc',
+          sender_last_name: 'lee',
           card_type: 1,
           card_number: '5017670000006700',
           card_crypto: '123',
@@ -25,8 +25,8 @@ module LemonSqueezer
       LemonSqueezer::Card.new(
         {
           sender: random_email,
-          sender_first_name: random_string,
-          sender_last_name: random_string,
+          sender_first_name: 'Marc',
+          sender_last_name: 'lee',
           card_type: 1,
           card_number: '5017670000006700',
           card_crypto: '123',
@@ -44,8 +44,8 @@ module LemonSqueezer
       LemonSqueezer::Card.new(
         {
           sender: random_email,
-          sender_first_name: random_string,
-          sender_last_name: random_string,
+          sender_first_name: 'Marc',
+          sender_last_name: 'lee',
           card_type: 1,
           card_number: '5017670000006700',
           card_crypto: '123',
@@ -314,6 +314,31 @@ module LemonSqueezer
         no_card_money_in_web_init.money_in_web_init
         expect(no_card_money_in_web_init.error).to be_a(Hash)
         expect(no_card_money_in_web_init.error[:code]).to eq -1
+      end
+    end
+
+    let(:card_get_money_in_trans_details) {
+      LemonSqueezer::Card.new(
+        {
+          transaction_merchant_token: '1245',
+          public_ip: '46.101.130.8',
+        }
+      )
+    }
+    let(:shortcut_get_money_in_trans_details) { LemonSqueezer.card_get_money_in_trans_details }
+
+    describe '#get_money_in_trans_details' do
+      it 'returns a LemonSqueezer::Card object' do
+        expect(card_get_money_in_trans_details.get_money_in_trans_details).to be_a(LemonSqueezer::Card)
+      end
+
+      it 'shortcut return a LemonSqueezer::Card object' do
+        expect(shortcut_get_money_in_trans_details).to be_a(LemonSqueezer::Card)
+      end
+
+      it 'get money in transaction details' do
+        card_get_money_in_trans_details.get_money_in_trans_details
+        expect(card_get_money_in_trans_details.hpay).to be_a(Array)
       end
     end
 
