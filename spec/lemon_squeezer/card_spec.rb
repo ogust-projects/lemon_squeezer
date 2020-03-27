@@ -252,7 +252,7 @@ module LemonSqueezer
           auto_commission: 0,
           config_name: :EUR,
           public_ip: '46.101.130.8',
-          wk_token: '1245',
+          wk_token: '1234',
           return_url: 'https://localhost/return_url',
           error_url: 'https://localhost/error_url',
           cancel_url: 'https://localhost/cancel_url',

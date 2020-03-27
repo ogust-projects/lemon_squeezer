@@ -3,7 +3,7 @@ module LemonSqueezer
     attr_accessor :id, :token, :from_moneyin, :card_id, :sender, :sender_first_name, :sender_last_name, :receiver, :amount, :hpay,
                   :card_type, :card_number, :card_crypto, :card_date, :message, :auto_commission, :register_card, :debit,
                   :credit, :commission, :status, :error, :config_name, :public_ip, :wk_token, :return_url, :error_url, :cancel_url, :is_pre_auth,
-                  :transaction_id, :transaction_comment, :transaction_merchant_token, :start_date, :end_date
+                  :delayed_days, :transaction_id, :transaction_comment, :transaction_merchant_token, :start_date, :end_date
 
     TYPES = %i(cb visa mastercard)
 
@@ -16,7 +16,7 @@ module LemonSqueezer
     FAST_PAY_PARAMS              = %i(clientMail clientFirstName clientLastName cardType cardNumber cardCrypto cardDate creditWallet amount autoCommission registerCard)
     MONEY_IN_PARAMS              = %i(wallet cardType cardNumber cardCrypto cardDate amountTot)
     MONEY_IN_WITH_CARD_ID_PARAMS = %i(wallet cardId amountTot autoCommission)
-    MONEY_IN_WEB_INIT_PARAMS     = %i(wallet amountTot autoCommission wkToken returnUrl errorUrl cancelUrl registerCard isPreAuth)
+    MONEY_IN_WEB_INIT_PARAMS     = %i(wallet amountTot autoCommission wkToken returnUrl errorUrl cancelUrl registerCard isPreAuth delayedDays)
     GET_MONEY_IN_TRANS_DETAILS_PARAMS     = %i()
     REGISTER_PARAMS              = %i(wallet cardType cardNumber cardCode cardDate)
 
@@ -42,6 +42,7 @@ module LemonSqueezer
       @error_url          = params[:error_url]
       @cancel_url         = params[:cancel_url]
       @is_pre_auth        = params[:is_pre_auth]
+      @delayed_days        = params[:delayed_days]
       
       @transaction_id     = params[:transaction_id]
       @transaction_comment     = params[:transaction_comment]
@@ -245,6 +246,7 @@ module LemonSqueezer
       params.merge!(cancelUrl: self.cancel_url) if self.cancel_url
       params.merge!(registerCard: self.register_card) if self.register_card
       params.merge!(isPreAuth: self.is_pre_auth) if self.is_pre_auth
+      params.merge!(delayedDays: self.delayed_days) if self.delayed_days
       
 
       params
