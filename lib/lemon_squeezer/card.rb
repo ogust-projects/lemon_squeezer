@@ -63,9 +63,9 @@ module LemonSqueezer
           self.id           = result[:hpay][:id]
           self.from_moneyin = result[:hpay][:from_moneyin]
           self.card_id      = result[:hpay][:card_id]
-          self.debit        = BigDecimal.new(result[:hpay][:deb])
-          self.credit       = BigDecimal.new(result[:hpay][:cred])
-          self.commission   = BigDecimal.new(result[:hpay][:com])
+          self.debit        = BigDecimal(result[:hpay][:deb])
+          self.credit       = BigDecimal(result[:hpay][:cred])
+          self.commission   = BigDecimal(result[:hpay][:com])
           self.status       = result[:hpay][:status].to_i
         end
 
@@ -83,8 +83,8 @@ module LemonSqueezer
         if result
           self.id          = result[:hpay][:id]
           self.card_number = result[:hpay][:mlabel]
-          self.credit      = BigDecimal.new(result[:hpay][:cred])
-          self.commission  = BigDecimal.new(result[:hpay][:com])
+          self.credit      = BigDecimal(result[:hpay][:cred])
+          self.commission  = BigDecimal(result[:hpay][:com])
           self.status      = result[:hpay][:status].to_i
         end
 
@@ -101,8 +101,8 @@ module LemonSqueezer
         if result
           self.id          = result[:hpay][:id]
           self.card_number = result[:hpay][:mlabel]
-          self.credit      = BigDecimal.new(result[:hpay][:cred])
-          self.commission  = BigDecimal.new(result[:hpay][:com])
+          self.credit      = BigDecimal(result[:hpay][:cred])
+          self.commission  = BigDecimal(result[:hpay][:com])
           self.status      = result[:hpay][:status].to_i
         end
 
